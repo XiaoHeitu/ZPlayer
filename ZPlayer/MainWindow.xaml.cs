@@ -25,8 +25,6 @@ namespace ZPlayer
         public MainWindow()
         {
             InitializeComponent();
-
-            this.LoadFile();
         }
 
         public void LoadFile()
@@ -34,9 +32,35 @@ namespace ZPlayer
             var result = open.ShowDialog();
             if ((result ?? false))
             {
-
-                this.MyElement.Source = new Uri($"http://localhost:56153/ZFile/Open?file={System.Web.HttpUtility.UrlEncode(open.FileName)}");
+                this.MyElement.Source = new Uri($"http://localhost:20813/ZFile/Open?file={System.Web.HttpUtility.UrlEncode(open.FileName)}");
+                
             }
+        }
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.LoadFile();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {            
+            this.MyElement.Play();
+        }
+
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var cur = this.MyElement.Volume;
+            var value = cur + ((double)e.Delta / 10000 * 5);
+            if (value <= 0)
+            {
+                value = 0;
+            }
+            if(value >= 1)
+            {
+                value = 1;
+            }
+            this.MyElement.Volume = value;
         }
     }
 }

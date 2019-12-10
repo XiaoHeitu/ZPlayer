@@ -11,16 +11,21 @@ namespace ZPlayerStreamHost
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async Task StartHost()
         {
-            CreateHostBuilder(args).Build().Run();
+            await Main(null);
+        }
+        public async static Task Main(string[] args)
+        {
+            await CreateHostBuilder(args).Build().RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                    .UseUrls("http://localhost:20813");
                 });
     }
 }
