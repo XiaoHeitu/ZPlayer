@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZPlayer", "ZPlayer\ZPlayer.csproj", "{A9C5183F-3E98-418F-BF0F-2DE7FCCEFCEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZPlayer", "ZPlayer\ZPlayer.csproj", "{A9C5183F-3E98-418F-BF0F-2DE7FCCEFCEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZPlayerStreamServer", "ZPlayerStreamServer\ZPlayerStreamServer.csproj", "{4C152FB6-5C64-4C51-9D00-B45BAB19B0A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZPlayerStreamHost", "ZPlayerStreamHost\ZPlayerStreamHost.csproj", "{889CA197-8B1B-4CBA-8D0A-BDE381BB7CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A9C5183F-3E98-418F-BF0F-2DE7FCCEFCEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9C5183F-3E98-418F-BF0F-2DE7FCCEFCEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9C5183F-3E98-418F-BF0F-2DE7FCCEFCEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C152FB6-5C64-4C51-9D00-B45BAB19B0A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C152FB6-5C64-4C51-9D00-B45BAB19B0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C152FB6-5C64-4C51-9D00-B45BAB19B0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C152FB6-5C64-4C51-9D00-B45BAB19B0A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{889CA197-8B1B-4CBA-8D0A-BDE381BB7CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{889CA197-8B1B-4CBA-8D0A-BDE381BB7CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{889CA197-8B1B-4CBA-8D0A-BDE381BB7CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{889CA197-8B1B-4CBA-8D0A-BDE381BB7CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
