@@ -24,6 +24,7 @@ namespace ZPlayer
         OpenFileDialog open = new OpenFileDialog();
         public MainWindow()
         {
+            
             InitializeComponent();
         }
 
@@ -61,6 +62,11 @@ namespace ZPlayer
                 value = 1;
             }
             this.MyElement.Volume = value;
+        }
+
+        private void MyElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            MessageBox.Show(e.ErrorException.Message, "出错了", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
