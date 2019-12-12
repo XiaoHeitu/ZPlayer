@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:ZPlayer"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MouseWheel="Window_MouseWheel">
-    <Grid>
-        <MediaElement Name="MyElement" Margin="10,10,10,60" MediaFailed="MyElement_MediaFailed"/>
+    <Grid Name="panle1">
         <Button Content="打开文件[_O]" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="150" Margin="0,0,0,10" Click="Button_Click"/>
         <Button Content="播放" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="103" Margin="0,0,100,10" Click="Button_Click_1"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,10,10" Text="{Binding Position, ElementName=MyElement, Mode=OneWay, StringFormat=\{0:hh24:mm:dd\}}"/>
+        <WindowsFormsHost HorizontalAlignment="Left" Height="199" Margin="230,137,0,0" VerticalAlignment="Top" Width="425">
+            
+        </WindowsFormsHost>
 
     </Grid>
 </Window>
