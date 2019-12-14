@@ -25,7 +25,7 @@ namespace ZPlayer
         public MainWindow()
         {
             
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         public void LoadFile()
