@@ -29,9 +29,7 @@ namespace ZPlayer
         }
 
         public void LoadFile()
-        {
-            Microsoft.DirectX.AudioVideoPlayback.Video video = new Microsoft.DirectX.AudioVideoPlayback.Video(@"I:\测试片\Girls Generation\[MV]Girls_Generation-Gee.ts");
-            
+        {            
             //var result = open.ShowDialog();
             //if ((result ?? false))
             //{

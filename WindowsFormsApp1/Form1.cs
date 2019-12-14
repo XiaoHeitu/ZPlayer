@@ -18,15 +18,12 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         OpenFileDialog openFD = new OpenFileDialog();
-
-        // List of controls used to store those controls that will be playing
-        private readonly VlcControl vlcControl = null;
-
+      
         // Extra parameters to pass to the viewer media. I found a 2 seconds buffer cache makes playing much more stable.
         private const string StreamParams = ":network-caching=2000";
 
         // My path to VLC folder. You can Set your own.
-        private string vlcLibraryPath;
+        //private string vlcLibraryPath;
 
         // Count number of clicks on any player.
         //private int numberOfClicks;
@@ -37,39 +34,33 @@ namespace WindowsFormsApp1
         public Form1()
         {
             this.InitializeComponent();
-
-            var currentAssembly = Assembly.GetEntryAssembly();
-            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
-            // Default installation path of VideoLAN.LibVLC.Windows
-            this.vlcLibraryPath = Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64");
-
-
-            this.vlcControl = new VlcControl();
-            this.vlcControl.BeginInit();
-            this.vlcControl.VlcLibDirectory = new DirectoryInfo(this.vlcLibraryPath);
-            this.vlcControl.Size = new Size(681, 400);
-            this.vlcControl.Location = new Point(13, 13);
-            this.vlcControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.vlcControl.EndInit();
-            this.Controls.Add(this.vlcControl);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (this.openFD.ShowDialog() == DialogResult.OK)
             {
-                this.vlcControl.SetMedia(this.openFD.FileName, ":network-caching=2000");
+                this.vlcControl1.SetMedia(this.openFD.FileName, ":network-caching=2000");
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.vlcControl.Play();
+            this.vlcControl1.Play();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.vlcControl.Pause();
+            this.vlcControl1.Pause();
+        }
+
+        private void vlcControl1_VlcLibDirectoryNeeded(object sender, VlcLibDirectoryNeededEventArgs e)
+        {
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            // Default installation path of VideoLAN.LibVLC.Windows
+            var vlcLibraryPath = Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64");
+            e.VlcLibDirectory = new DirectoryInfo(vlcLibraryPath);
         }
     }
 }
