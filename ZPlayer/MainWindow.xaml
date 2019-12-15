@@ -3,16 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ZPlayer"
+        xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MouseWheel="Window_MouseWheel">
     <Grid Name="panle1">
+        <vlc:VlcControl x:Name="vlcControl1"></vlc:VlcControl>
         <Button Content="打开文件[_O]" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Width="150" Margin="0,0,0,10" Click="Button_Click"/>
-        <Button Content="播放" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="103" Margin="0,0,100,10" Click="Button_Click_1"/>
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,10,10" Text="{Binding Position, ElementName=MyElement, Mode=OneWay, StringFormat=\{0:hh24:mm:dd\}}"/>
-        <WindowsFormsHost HorizontalAlignment="Left" Height="199" Margin="230,137,0,0" VerticalAlignment="Top" Width="425">
-            
-        </WindowsFormsHost>
-
+        <Button Content="播放" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="103" Margin="0,0,100,10" Click="Button_Click_1"/>     
     </Grid>
 </Window>
