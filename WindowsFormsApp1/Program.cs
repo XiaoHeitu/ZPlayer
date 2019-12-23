@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
         [STAThread]
         static void Main()
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
