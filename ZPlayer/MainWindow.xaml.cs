@@ -24,6 +24,8 @@ namespace ZPlayer
     public partial class MainWindow : Window
     {
         OpenFileDialog open = new OpenFileDialog();
+        LibVLC _libVLC;
+        MediaPlayer _mediaPlayer;
         public MainWindow()
         {
             
@@ -44,8 +46,6 @@ namespace ZPlayer
 
             VideoView1.MediaPlayer = _mediaPlayer;
         }
-        LibVLC _libVLC;
-        MediaPlayer _mediaPlayer;
 
         public void LoadFile()
         {            
