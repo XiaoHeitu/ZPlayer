@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -42,6 +43,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.Paused += this._mediaPlayer_Paused;
             this._mediaPlayer.Playing += this._mediaPlayer_Playing;
             this._mediaPlayer.Stopped += this._mediaPlayer_Stopped;
+            this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
+            this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
 
             //this.videoView1.MediaPlayer = this._mediaPlayer;
 
@@ -49,12 +52,26 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         }
 
+        private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                this.zSlider1.Value = e.Position;
+            }));
+        }
+        private void _mediaPlayer_EndReached(object sender, EventArgs e)
+        {
+
+        }
+
+
         private void _mediaPlayer_Stopped(object sender, EventArgs e)
         {
             this.Invoke(new Action(() =>
             {
                 this.btnPlay.Visible = true;
                 this.btnPause.Visible = false;
+                this.zSlider1.Value = 0;
             }));
         }
 
@@ -110,16 +127,13 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private Stream GetZipStream(string filename)
         {
-            throw new Exception("暂不支持ZIP文件！");
-            //Stream result = null;
-            //FileStream zipToOpen = File.OpenRead(filename);
-            //ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read);
-            //var entry = archive.Entries[0];
-            //result = entry.Open();
-            //return result;
+            Stream result = null;
+            FileStream zipToOpen = File.OpenRead(filename);
+            ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read);
+            var entry = archive.Entries[0];
+            result = entry.Open();
+            return result;
         }
-
-
 
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -165,6 +179,16 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         private void btnStop_Click(object sender, EventArgs e)
         {
             this._mediaPlayer.Stop();
+        }
+
+        private void zSlider1_ValueChanged(object arg1, EventArgs arg2)
+        {
+            this._mediaPlayer.PositionChanged -= this._mediaPlayer_PositionChanged;
+          
+            this._mediaPlayer.Position = this.zSlider1.Value;
+            
+
+            this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
         }
     }
 }

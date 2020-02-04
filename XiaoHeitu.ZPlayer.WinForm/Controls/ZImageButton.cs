@@ -6,12 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using XiaoHeitu.ZPlayer.WinForm.Apis;
 using XiaoHeitu.ZPlayer.WinForm.Forms;
 
 namespace XiaoHeitu.ZPlayer.WinForm.Controls
 {
     public class ZImageButton : SkinControl
     {
+
+        private bool isDown = false;
+        private bool isHover = false;
+
+        BaseForm _Form = null;
+
+        [Browsable(true)]
+        private Padding ImageEdgeInset { get; set; } = Padding.Empty;
+
         [Browsable(true)]
         public Image NormalImage { get; set; }
         [Browsable(true)]
@@ -19,24 +29,14 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         [Browsable(true)]
         public Image HoverImage { get; set; }
 
-        private bool isDown = false;
-        private bool isHover = false;
-
-        BaseForm _Form = null;
-
         public ZImageButton()
         {
         }
-        protected override void OnParentChanged(EventArgs e)
-        {
-            this._Form = this.FindForm() as BaseForm;
-            base.OnParentChanged(e);
-        }
 
-        protected override void OnPaint(PaintEventArgs e)
+        protected override void OnZPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-            if(this.ClientRectangle== Rectangle.Empty)
+            base.OnZPaint(e);
+            if (this.ClientRectangle == Rectangle.Empty)
             {
                 return;
             }
@@ -58,13 +58,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             {
                 return;
             }
+            if (this.ImageEdgeInset != Padding.Empty)
+            {
+                image = ImageApi.ImageStretch(image, this.ImageEdgeInset, this.Size);
+            }
 
             e.Graphics.DrawImage(image, 0, 0, this.Width, this.Height);
         }
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
-            this.isDown = true;            
+            this.isDown = true;
             this.Refresh();
             base.OnMouseDown(mevent);
         }
@@ -85,10 +89,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             this.isHover = false;
             this.Refresh();
             base.OnMouseLeave(e);
-        }
-        protected override void OnMouseMove(MouseEventArgs mevent)
-        {
-            base.OnMouseMove(mevent);
         }
     }
 }

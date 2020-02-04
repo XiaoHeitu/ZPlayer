@@ -29,11 +29,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.button1 = new System.Windows.Forms.Button();
             this.btnPlay = new XiaoHeitu.ZPlayer.WinForm.Controls.ZImageButton();
             this.btnPause = new XiaoHeitu.ZPlayer.WinForm.Controls.ZImageButton();
             this.pMoiveHost = new System.Windows.Forms.Panel();
             this.btnStop = new XiaoHeitu.ZPlayer.WinForm.Controls.ZImageButton();
+            this.zSlider1 = new XiaoHeitu.ZPlayer.WinForm.Controls.ZSlider();
             this.SuspendLayout();
             // 
             // button1
@@ -102,6 +104,28 @@
             this.btnStop.Text = "zImageButton1";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
+            // zSlider1
+            // 
+            this.zSlider1.DraggerEdgeInset = new System.Windows.Forms.Padding(0);
+            this.zSlider1.DraggerSize = new System.Drawing.Size(15, 15);
+            this.zSlider1.HoverDraggerImage = ((System.Drawing.Image)(resources.GetObject("zSlider1.HoverDraggerImage")));
+            this.zSlider1.LoaderEdgeInset = new System.Windows.Forms.Padding(1);
+            this.zSlider1.LoaderImage = ((System.Drawing.Image)(resources.GetObject("zSlider1.LoaderImage")));
+            this.zSlider1.LoaderValue = 0.5F;
+            this.zSlider1.Location = new System.Drawing.Point(68, 488);
+            this.zSlider1.Name = "zSlider1";
+            this.zSlider1.NormalDraggerImage = ((System.Drawing.Image)(resources.GetObject("zSlider1.NormalDraggerImage")));
+            this.zSlider1.PressDraggerImage = ((System.Drawing.Image)(resources.GetObject("zSlider1.PressDraggerImage")));
+            this.zSlider1.RailEdgeInset = new System.Windows.Forms.Padding(1);
+            this.zSlider1.RailImage = ((System.Drawing.Image)(resources.GetObject("zSlider1.RailImage")));
+            this.zSlider1.RailPadding = new System.Windows.Forms.Padding(2);
+            this.zSlider1.RailWidth = 10;
+            this.zSlider1.Size = new System.Drawing.Size(240, 17);
+            this.zSlider1.TabIndex = 0;
+            this.zSlider1.Text = "zSlider1";
+            this.zSlider1.Value = 0F;
+            this.zSlider1.ValueChanged += new System.Action<object, System.EventArgs>(this.zSlider1_ValueChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -110,6 +134,7 @@
             this.BackgroundImage = global::XiaoHeitu.ZPlayer.WinForm.Properties.Resources.Background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(640, 510);
+            this.Controls.Add(this.zSlider1);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnPlay);
@@ -131,6 +156,7 @@
         private Controls.ZImageButton btnPause;
         private System.Windows.Forms.Panel pMoiveHost;
         private Controls.ZImageButton btnStop;
+        private Controls.ZSlider zSlider1;
     }
 }
 

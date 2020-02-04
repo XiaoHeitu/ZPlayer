@@ -117,4 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="zSlider1.HoverDraggerImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACtSURBVChTVcoxCoNQFETRv4QsJUvIDrOW31gJKey0
+        EMRGG0FstNFCBFGYjENCMg9u884E/F0I4c5uTPd568J5njiOQ9Ge7BrrzPZ9x7ZtivZiD614Zuu6YlkW
+        RbOh2TzPGMdR0WxoNk0T+r5XNBuaDcOAtm0VzYZmXdehqipFs6FZ0zTI81zRbGhW1zWyLFM0G5qVZYk0
+        TRXNhmZFUSBJEkWzoVmMEd9oNvxZxBtwQiLyC+dt9QAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="zSlider1.LoaderImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAjSURBVChTfcexDQAACMCg/v+0zjKYsND08fDw8PDw
+        8PDwRy23ymOdc/3D/QAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="zSlider1.NormalDraggerImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACySURBVChTVcoxyoNgAINhj9Cj9Ai9Yc/ioJPQwUHQ
+        QRAXdVDERRcdRJBvSPMHfkoC7/QkmqYJwzAgSRJEUfRkD6aZFUWBOI4V7c3+zppZVVVI01TRPuylF2dW
+        1zWyLFM0O5q1bYs8zxXNjmZd16EsS0Wzo9k4jmiaRtHsaLYsC/q+VzQ7mm3bhnmeFc2OZvu+Y11XRbOj
+        2XmeOI5D0exodt83rutSNDuahRDwH82OPwv4Aj9bICI+XaypAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="zSlider1.PressDraggerImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACySURBVChTVcoxyoNgAINhj9Cj9Ai9Yc/ioJPQwUHQ
+        QRAXdVDERRcdRJBvSPMHfkoC7/QkmqYJwzAgSRJEUfRkD6aZFUWBOI4V7c3+zppZVVVI01TRPuylF2dW
+        1zWyLFM0O5q1bYs8zxXNjmZd16EsS0Wzo9k4jmiaRtHsaLYsC/q+VzQ7mm3bhnmeFc2OZvu+Y11XRbOj
+        2XmeOI5D0exodt83rutSNDuahRDwH82OPwv4Aj9bICI+XaypAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="zSlider1.RailImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAkSURBVChTfcehCQAADAOw/v90Z0vEICZJXx4eHh4e
+        Hh4efjUHVC5jnfY+el4AAAAASUVORK5CYII=
+</value>
+  </data>
 </root>
