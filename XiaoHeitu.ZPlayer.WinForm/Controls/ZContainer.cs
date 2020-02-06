@@ -30,7 +30,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         [RefreshProperties(RefreshProperties.Repaint)]
         public new Image BackgroundImage
         {
-            get;set;
+            get; set;
         }
         public ZContainer()
         {
@@ -49,32 +49,47 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            foreach(var control in this.ZControls)
+            bool handler = false;
+            foreach (var control in this.ZControls)
             {
-                control.DoMouseDown(e);
-                control.DoClick(e);
+                handler |= control.DoMouseDown(e);
+            }
+            if (handler)
+            {
+                return;
             }
             base.OnMouseDown(e);
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            bool handler = false;
             foreach (var control in this.ZControls)
             {
-                control.DoMouseUp(e);
+                handler |= control.DoMouseUp(e);
+                handler |= control.DoClick(e);
+            }
+            if (handler)
+            {
+                return;
             }
             base.OnMouseUp(e);
         }
-        
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            bool handler = false;
             foreach (var control in this.ZControls)
             {
-                control.DoMouseMove(e);
-                control.DoMouseEnter(e);
-                control.DoMouseLeave(e);
+                handler |= control.DoMouseMove(e);
+                handler |= control.DoMouseEnter(e);
+                handler |= control.DoMouseLeave(e);
+            }
+            if (handler)
+            {
+                return;
             }
             base.OnMouseMove(e);
-        }       
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {

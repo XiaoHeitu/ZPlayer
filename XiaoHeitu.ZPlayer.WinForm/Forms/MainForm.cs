@@ -291,16 +291,16 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.pPreviewHost.Visible = false;
         }
 
-        //private void zContainer1_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    Win32Api.ReleaseCapture();
-        //    Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
-        //}
+        private void zContainer1_MouseDown(object sender, MouseEventArgs e)
+        {
+            Win32Api.ReleaseCapture();
+            Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+        }
 
-        //private void pMoiveHost_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    Win32Api.ReleaseCapture();
-        //    Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
-        //}
+        private void pMoiveHost_MouseDown(object sender, MouseEventArgs e)
+        {
+            Win32Api.ReleaseCapture();
+            Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+        }
     }
 }

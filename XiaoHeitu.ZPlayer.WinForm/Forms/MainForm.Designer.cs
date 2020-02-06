@@ -58,6 +58,7 @@
             this.pMoiveHost.Name = "pMoiveHost";
             this.pMoiveHost.Size = new System.Drawing.Size(640, 462);
             this.pMoiveHost.TabIndex = 9;
+            this.pMoiveHost.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pMoiveHost_MouseDown);
             // 
             // zContainer1
             // 
@@ -72,6 +73,7 @@
             this.zContainer1.Size = new System.Drawing.Size(640, 29);
             this.zContainer1.TabIndex = 0;
             this.zContainer1.Text = "zContainer1";
+            this.zContainer1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.zContainer1_MouseDown);
             // 
             // pPreviewHost
             // 

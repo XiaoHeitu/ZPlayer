@@ -291,7 +291,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// OnMouseDown-->DoMouseDown
         /// </summary>
         /// <param name="e"></param>
-        public void DoMouseDown(MouseEventArgs ce)
+        public bool DoMouseDown(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (rect.Contains(ce.Location))
@@ -299,7 +299,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 this.isDown = true;
                 var e = this.CreateMouseEventArgs(ce);
                 this.OnMouseDown(e);
+                return true;
             }
+            return false;
         }
 
 
@@ -307,7 +309,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// OnMouseUp-->DoMouseUp
         /// </summary>
         /// <param name="e"></param>
-        public void DoMouseUp(MouseEventArgs ce)
+        public bool DoMouseUp(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (rect.Contains(ce.Location))
@@ -315,14 +317,16 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 this.isDown = false;
                 var e = this.CreateMouseEventArgs(ce);
                 this.OnMouseUp(e);
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// OnMouseMove-->DoMouseEnter
         /// </summary>
         /// <param name="e"></param>
-        public void DoMouseEnter(MouseEventArgs ce)
+        public bool DoMouseEnter(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (rect.Contains(ce.Location))
@@ -330,15 +334,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (!this.isHover)
                 {
                     this.isHover = true;
-                    this.OnMouseEnter(EventArgs.Empty);
-                }
+                    this.OnMouseEnter(EventArgs.Empty); 
+                    return true;
+                }               
             }
+            return false;
         }
         /// <summary>
         /// OnMouseMove-->DoMouseLeave
         /// </summary>
         /// <param name="e"></param>
-        public void DoMouseLeave(MouseEventArgs ce)
+        public bool DoMouseLeave(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (!rect.Contains(ce.Location))
@@ -347,33 +353,39 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 {
                     this.isHover = false;
                     this.OnMouseLeave(EventArgs.Empty);
+                return true;
                 }
             }
+            return false;
         }
         /// <summary>
         /// OnMouseMove-->DoMouseMove
         /// </summary>
         /// <param name="e"></param>
-        public virtual void DoMouseMove(MouseEventArgs ce)
+        public virtual bool DoMouseMove(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (rect.Contains(ce.Location))
             {
                 var e = this.CreateMouseEventArgs(ce);
                 this.OnMouseMove(e);
+                return true;
             }
+            return false;
         }
         /// <summary>
         /// OnMouseUp-->DoClick
         /// </summary>
         /// <param name="e"></param>
-        public virtual void DoClick(MouseEventArgs ce)
+        public virtual bool DoClick(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
             if (rect.Contains(ce.Location))
             {
                 this.OnClick(EventArgs.Empty);
+                return true;
             }
+            return false;
         }
     }
 }
