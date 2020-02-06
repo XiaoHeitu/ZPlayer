@@ -155,16 +155,16 @@
     <None Include="Resources\Stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Pause OnPress.png" />
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play OnPress.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Pause.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Play OnPress.png" />
+    <None Include="Resources\Pause OnPress.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

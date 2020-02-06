@@ -97,11 +97,11 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             // 
             this.btnPause.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left)));
             this.btnPause.HoverImage = Resources.Pause;
-            this.btnPause.Location = new Point(16, 8);
+            this.btnPause.Location = new Point(15, 7);
             this.btnPause.Name = "btnPause";
             this.btnPause.NormalImage = Resources.Pause_OnPress;
             this.btnPause.PressImage = Resources.Pause_OnPress;
-            this.btnPause.Size = new Size(14, 17);
+            this.btnPause.Size = new Size(17, 19);
             //this.btnPause.TabIndex = 8;
             //this.btnPause.Text = "zButton1";
             this.btnPause.Visible = false;
