@@ -44,7 +44,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             get => this.value;
             set
             {
-                if (this.value != value && !this.isDraggerDown)
+                if (this.value != value && !this.isDraggerDown && !this.isDown)
                 {
                     this.value = value;
                     this.Invalidate();
@@ -237,7 +237,15 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         }
 
 
-        Point dragStartPoint;
+        //Point dragStartPoint;
+
+        protected virtual void OnValueChanged(float newValue)
+        {
+            if (this.ValueChanged != null)
+            {
+                this.ValueChanged(this, new ValueChangedEventArgs(newValue));
+            }
+        }
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
@@ -245,12 +253,20 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             if (this.isDraggerHover)
             {
                 this.isDraggerDown = true;
-                this.dragStartPoint = mevent.Location;
+                //this.dragStartPoint = mevent.Location;
             }
             else
             {
                 this.isDraggerDown = false;
+
+                var newValue = this.GetValueByPoint(mevent.Location);
+                this.OnValueChanged(newValue);
+
+                this.value = newValue;
             }
+
+
+
             this.Invalidate();
             base.OnMouseDown(mevent);
         }
@@ -294,13 +310,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             if (this.isDraggerDown)
             {
                 var newValue = this.GetValueByPoint(e.Location);
-                if (this.ValueChanged != null)
-                {
-                    this.ValueChanged(this, new ValueChangedEventArgs(newValue));
-                }
+                this.OnValueChanged(newValue);
 
                 this.value = newValue;
-                this.dragStartPoint = e.Location;
+                //this.dragStartPoint = e.Location;
             }
 
 

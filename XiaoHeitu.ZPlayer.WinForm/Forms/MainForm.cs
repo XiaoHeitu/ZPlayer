@@ -269,7 +269,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void sldProgress_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            this._mediaPlayer.Position = this.sldProgress.Value;
+            this._mediaPlayer.Position = e.Value;
         }
 
         private void sldProgress_Hover(object sender, HoverEventArgs e)
