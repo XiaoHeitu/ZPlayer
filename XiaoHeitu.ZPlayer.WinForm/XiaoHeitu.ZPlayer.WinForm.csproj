@@ -155,13 +155,13 @@
     <None Include="Resources\Stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Pause OnPress.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Play OnPress.png" />

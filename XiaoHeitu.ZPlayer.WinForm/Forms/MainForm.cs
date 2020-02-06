@@ -121,7 +121,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             //
             // sldProgress
             //
-            this.sldProgress.Anchor = ((AnchorStyles)((AnchorStyles.Left|AnchorStyles.Bottom | AnchorStyles.Right)));
+            this.sldProgress.Anchor = ((AnchorStyles)((AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right)));
             this.sldProgress.DraggerEdgeInset = new Padding(0);
             this.sldProgress.DraggerSize = new Size(19, 19);
             this.sldProgress.HoverDraggerImage = Resources.Slider_Dragger;
@@ -132,7 +132,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.sldProgress.Name = "sldProgress";
             this.sldProgress.NormalDraggerImage = Resources.Slider_Dragger;
             this.sldProgress.PressDraggerImage = Resources.Slider_Dragger_OnPress;
-            this.sldProgress.RailEdgeInset = new Padding(6,5,6,5);
+            this.sldProgress.RailEdgeInset = new Padding(6, 5, 6, 5);
             this.sldProgress.RailImage = Resources.Slider_Rail;
             this.sldProgress.RailPadding = new Padding(0);
             this.sldProgress.RailWidth = 10;
@@ -141,6 +141,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             //this.sldProgress.Text = "zSlider1";
             this.sldProgress.Value = 0F;
             this.sldProgress.ValueChanged += new ValueChangedEventHandler(this.sldProgress_ValueChanged);
+            this.sldProgress.Hover += new HoverEventHandler(this.sldProgress_Hover);
+            this.sldProgress.MouseLeave += new EventHandler(this.sldProgress_MouseLeave);
 
             this.zContainer1.ZControls.Add(this.btnPlay);
             this.zContainer1.ZControls.Add(this.btnPause);
@@ -276,8 +278,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             {
                 return;
             }
-            Control c = (Control)sender;
-            this.pPreviewHost.Location = new Point((c.Location.X + e.MouseLocation.X - this.pPreviewHost.Size.Width / 2), (c.Location.Y - this.pPreviewHost.Size.Height + 2));
+            ZControl c = (ZControl)sender;
+            this.pPreviewHost.Location = new Point((this.zContainer1.Location.X + c.Location.X + e.MouseLocation.X - this.pPreviewHost.Size.Width / 2), (this.zContainer1.Location.Y + c.Location.Y - this.pPreviewHost.Size.Height + 2));
             this._preview.Position = e.HoverValue;
             this._preview.Play();
             this.pPreviewHost.Visible = true;
@@ -288,5 +290,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._preview.Pause();
             this.pPreviewHost.Visible = false;
         }
+
+        //private void zContainer1_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    Win32Api.ReleaseCapture();
+        //    Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+        //}
+
+        //private void pMoiveHost_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    Win32Api.ReleaseCapture();
+        //    Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+        //}
     }
 }

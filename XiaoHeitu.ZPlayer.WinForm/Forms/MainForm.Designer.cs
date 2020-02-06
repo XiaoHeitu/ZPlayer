@@ -56,7 +56,7 @@
             this.pMoiveHost.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pMoiveHost.Location = new System.Drawing.Point(2, 2);
             this.pMoiveHost.Name = "pMoiveHost";
-            this.pMoiveHost.Size = new System.Drawing.Size(640, 464);
+            this.pMoiveHost.Size = new System.Drawing.Size(640, 462);
             this.pMoiveHost.TabIndex = 9;
             // 
             // zContainer1
@@ -89,10 +89,10 @@
             this.BackgroundImage = global::XiaoHeitu.ZPlayer.WinForm.Properties.Resources.Background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(644, 494);
-            this.Controls.Add(this.zContainer1);
             this.Controls.Add(this.pPreviewHost);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pMoiveHost);
+            this.Controls.Add(this.zContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Form1";

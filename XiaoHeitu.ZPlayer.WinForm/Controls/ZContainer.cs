@@ -52,6 +52,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             foreach(var control in this.ZControls)
             {
                 control.DoMouseDown(e);
+                control.DoClick(e);
             }
             base.OnMouseDown(e);
         }
@@ -60,7 +61,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             foreach (var control in this.ZControls)
             {
                 control.DoMouseUp(e);
-                control.DoClick(e);
             }
             base.OnMouseUp(e);
         }

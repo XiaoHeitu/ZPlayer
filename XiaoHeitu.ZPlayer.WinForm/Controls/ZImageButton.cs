@@ -17,7 +17,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         private bool isDown = false;
         private bool isHover = false;
 
-        BaseForm _Form = null;
 
         [Browsable(true)]
         private Padding ImageEdgeInset { get; set; } = Padding.Empty;
@@ -37,10 +36,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         protected override void OnPaint(ZPaintContext context)
         {
             base.OnPaint(context);
-            if (!this.Visible)
-            {
-                return;
-            }
             Image image = null;
             if (this.isDown && this.PressImage != null)
             {

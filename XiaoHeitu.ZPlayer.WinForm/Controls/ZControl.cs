@@ -178,6 +178,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// <param name="containerPea"></param>
         public void DoPaint(PaintEventArgs containerPea)
         {
+            if (!this.Visible)
+            {
+                return;
+            }
             if (this.Size.Width > 0 && this.Size.Height > 0)
             {
                 //计算子控件绘制区域
