@@ -9,9 +9,28 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
 
     internal class Win32Api
     {
+        //窗口消息
+        public const int WM_LBUTTONDOWN = 0x0201;
         public const int WM_SYSCOMMAND = 0x0112;
+        public const int WM_NCHITTEST = 0x0084;
+        public const int WM_MOUSEDOWN = 0x0210;
+        public const int WM_SIZE = 0x0005;
+        public const int WM_PAINT = 0x000F;
+        public const int WM_ERASEBKGND = 0x0014;
+
+        //窗体移动
         public const int SC_MOVE = 0xF010;
         public const int HTCAPTION = 0x0002;
+
+        //改变窗体大小
+        public const int HTLEFT = 0x000A;
+        public const int HTRIGHT = 0x000B;
+        public const int HTTOP = 0x000C;
+        public const int HTTOPLEFT = 0x000D;
+        public const int HTTOPRIGHT = 0x000E;
+        public const int HTBOTTOM = 0x000F;
+        public const int HTBOTTOMLEFT = 0x0010;
+        public const int HTBOTTOMRIGHT = 0x0011;
 
         /// <summary> 
         /// Enumeration for the raster operations used in BitBlt. 
@@ -60,5 +79,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
             int nYSrc, // 源对象的左上角的X坐标
             TernaryRasterOperations dwRop // 光栅的操作值
             );
+
+
+
     }
 }

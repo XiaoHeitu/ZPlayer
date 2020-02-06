@@ -3,106 +3,103 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using XiaoHeitu.ZPlayer.WinForm.Apis;
+using XiaoHeitu.ZPlayer.WinForm.Properties;
 
 namespace XiaoHeitu.ZPlayer.WinForm.Forms
 {
     public class BaseForm : Form
     {
-        BufferedGraphicsContext MyBufferedGraphics = new BufferedGraphicsContext();
-
-        [Browsable(true)]
-        public Padding BackgroundEdgeInset
+        public BaseForm()
         {
-            get; set;
-        } = new Padding(0, 0, 0, 0);
+            this.DoubleBuffered = true;//设置本窗体
+            this.ResizeRedraw = true;
 
-        private Image _actualBackground = null;
-        public Image ActualBackground
+            this.SetStyle(ControlStyles.Opaque, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
+            this.SetStyle(ControlStyles.DoubleBuffer, true); // 双缓冲
+            this.SetStyle(ControlStyles.Opaque, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+            this.MaximumSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+            //this.MinimumSize = new Size(this.Width, this.Height);//窗体改变大小时最小限定在初始化大小            
+        }
+
+        protected override void WndProc(ref Message m)
         {
-            get
+            Console.WriteLine($"Window Message: 0x{m.Msg.ToString("X4")},HWnd: {m.HWnd}");
+            switch (m.Msg)
             {
-                return this._actualBackground;
+                case Win32Api.WM_NCHITTEST:
+                    {
+                        base.WndProc(ref m);
+                        Point vPoint = new Point((int)m.LParam & 0xFFFF,
+                            (int)m.LParam >> 16 & 0xFFFF);
+                        vPoint = this.PointToClient(vPoint);
+                        if (vPoint.X <= 5)
+                            if (vPoint.Y <= 5)
+                                m.Result = (IntPtr)Win32Api.HTTOPLEFT;
+                            else if (vPoint.Y >= this.ClientSize.Height - 5)
+                                m.Result = (IntPtr)Win32Api.HTBOTTOMLEFT;
+                            else m.Result = (IntPtr)Win32Api.HTLEFT;
+                        else if (vPoint.X >= this.ClientSize.Width - 5)
+                            if (vPoint.Y <= 5)
+                                m.Result = (IntPtr)Win32Api.HTTOPRIGHT;
+                            else if (vPoint.Y >= this.ClientSize.Height - 5)
+                                m.Result = (IntPtr)Win32Api.HTBOTTOMRIGHT;
+                            else m.Result = (IntPtr)Win32Api.HTRIGHT;
+                        else if (vPoint.Y <= 5)
+                            m.Result = (IntPtr)Win32Api.HTTOP;
+                        else if (vPoint.Y >= this.ClientSize.Height - 5)
+                            m.Result = (IntPtr)Win32Api.HTBOTTOM;
+
+                        break;
+                    }
+                case Win32Api.WM_LBUTTONDOWN://鼠标左键按下的消息 
+                    {
+                        //m.Msg = 0x00A1;//更改消息为非客户区按下鼠标 
+                        //m.LParam = IntPtr.Zero;//默认值 
+                        //m.WParam = new IntPtr(2);//鼠标放在标题栏内 
+                        //以下做了一些修正，确保放大缩小按钮区域可以正常使用
+
+                        //Point point = Control.MousePosition;
+                        //point = this.PointToClient(point);
+                        //if (point.X < this.Width - 100 && point.Y < 30)
+                        //{
+                        //    m.Msg = 0x00A1;//更改消息为非客户区按下鼠标
+                        //    m.LParam = IntPtr.Zero;//默认值
+                        //    m.WParam = new IntPtr(2);//鼠标放在标题栏内
+
+                        //    base.WndProc(ref m);
+                        //    break;
+                        //}
+
+                        Point mousePoint = this.PointToClient(Control.MousePosition);
+                        Rectangle dragRectangle = new Rectangle(5, 5, this.ClientSize.Width - 10, this.ClientSize.Height - 10);
+                        if (dragRectangle.Contains(mousePoint))
+                        {
+                            m.Msg = Win32Api.WM_SYSCOMMAND;
+                            m.WParam = (IntPtr)(Win32Api.SC_MOVE + Win32Api.HTCAPTION);
+                            m.LParam = IntPtr.Zero;
+                        }
+
+                        base.WndProc(ref m);
+                        break;
+                    }
+                //case Win32Api.WM_PAINT:
+                //    {
+                //        this.Repaint();
+                //        break;
+                //    }
+                default:
+                    base.WndProc(ref m);
+                    break;
             }
-        }
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-        }
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (this.BackgroundImage == null || this.BackgroundImageLayout != ImageLayout.Stretch || this.ClientRectangle == Rectangle.Empty)
-            {
-                base.OnPaint(e);
-                return;
-            }
-
-            BufferedGraphics MyBuffer = this.MyBufferedGraphics.Allocate(this.CreateGraphics(), this.ClientRectangle);//创建一个缓冲图像MyBuffer
-            this.MyBufferedGraphics.MaximumBuffer = new Size(this.ClientRectangle.Width, this.ClientRectangle.Height);//指定缓冲图像背景类的大小 
-            MyBuffer.Graphics.Clear(Color.Fuchsia);//指定图像背景色
-            var image = ImageApi.ImageStretch(this.BackgroundImage, this.BackgroundEdgeInset, this.MyBufferedGraphics.MaximumBuffer);
-
-
-            MyBuffer.Graphics.DrawImage(image, 0, 0);
-            MyBuffer.Render();//将画好的图显示到窗口当中
-            MyBuffer.Dispose();//释放资源  
-
-            this._actualBackground = image;
-        }
-
-        private void ShowBackgroundWithBitBlt(Bitmap image)
-        {
-            using (Graphics grDest = Graphics.FromHwnd(this.Handle))
-            using (Graphics grSrc = Graphics.FromImage(image))
-            {
-                IntPtr hdcDest = IntPtr.Zero;
-                IntPtr hdcSrc = IntPtr.Zero;
-                IntPtr hBitmap = IntPtr.Zero;
-                IntPtr hOldObject = IntPtr.Zero;
-                try
-                {
-                    hdcDest = grDest.GetHdc();
-                    hdcSrc = grSrc.GetHdc();
-                    hBitmap = image.GetHbitmap();
-                    hOldObject = Win32Api.SelectObject(hdcSrc, hBitmap);
-                    if (hOldObject == IntPtr.Zero)
-                        throw new Win32Exception();
-                    if (!Win32Api.BitBlt(hdcDest, 0, 0, this.Width, this.Height, hdcSrc, 0, 0, Win32Api.TernaryRasterOperations.SRCCOPY))
-                        throw new Win32Exception();
-                }
-                finally
-                {
-                    if (hOldObject != IntPtr.Zero) Win32Api.SelectObject(hdcSrc, hOldObject);
-                    if (hBitmap != IntPtr.Zero) Win32Api.DeleteObject(hBitmap);
-                    if (hdcDest != IntPtr.Zero) grDest.ReleaseHdc(hdcDest);
-                    if (hdcSrc != IntPtr.Zero) grSrc.ReleaseHdc(hdcSrc);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// 获取指定矩形的图片
-        /// </summary>
-        /// <param name="rectangle"></param>
-        /// <returns></returns>
-        internal Image GetActualBackground(Rectangle rectangle)
-        {
-            var result = new Bitmap(rectangle.Width, rectangle.Height);
-            if (this._actualBackground != null)
-            {
-                using (var g = Graphics.FromImage(result))
-                {
-                    g.DrawImage(this._actualBackground, 0, 0, rectangle, GraphicsUnit.Pixel);
-                }
-            }
-            return result;
         }
     }
 }

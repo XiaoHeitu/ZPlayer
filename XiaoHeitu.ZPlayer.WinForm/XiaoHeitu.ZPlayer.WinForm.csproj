@@ -49,6 +49,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,21 +67,23 @@
   <ItemGroup>
     <Compile Include="Apis\ImageApi.cs" />
     <Compile Include="Apis\Win32Api.cs" />
+    <Compile Include="Controls\ZControlCollection.cs" />
+    <Compile Include="Controls\ZControl.cs" />
+    <Compile Include="Controls\ZContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ZGraphics.cs" />
+    <Compile Include="Controls\ZPaintContext.cs" />
+    <Compile Include="Events\HoverEventArgs.cs" />
+    <Compile Include="Events\HoverEventHandler.cs" />
+    <Compile Include="Events\ValueChangedEventArgs.cs" />
+    <Compile Include="Events\ValueChangedEventHandler.cs" />
     <Compile Include="Forms\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\SkinControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TransparentBackControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ZImageButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ZSlider.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\SkinControl.cs" />
+    <Compile Include="Controls\ZImageButton.cs" />
+    <Compile Include="Controls\ZSlider.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,34 +131,40 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Stop OnPress.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Stop.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Background.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Pause Onpress.png" />
+    <None Include="Resources\Slider Dragger OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Slider Dragger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Slider Loader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Slider Rail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pause OnPress.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Pause.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Play OnPress.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Slider Rail.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Slider Loader.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

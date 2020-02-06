@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XiaoHeitu.ZPlayer.WinForm.Controls
 {
-    public class SkinControl : TransparentBackControl
+    public class SkinControl : ZControl
     {
         public void ApplySkin()
         {

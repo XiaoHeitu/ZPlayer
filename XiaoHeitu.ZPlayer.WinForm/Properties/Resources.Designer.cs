@@ -93,9 +93,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap Pause_Onpress {
+        internal static System.Drawing.Bitmap Pause_OnPress {
             get {
-                object obj = ResourceManager.GetObject("Pause_Onpress", resourceCulture);
+                object obj = ResourceManager.GetObject("Pause_OnPress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +116,26 @@ namespace XiaoHeitu.ZPlayer.WinForm.Properties {
         internal static System.Drawing.Bitmap Play_OnPress {
             get {
                 object obj = ResourceManager.GetObject("Play_OnPress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Slider_Dragger {
+            get {
+                object obj = ResourceManager.GetObject("Slider_Dragger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Slider_Dragger_OnPress {
+            get {
+                object obj = ResourceManager.GetObject("Slider_Dragger_OnPress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

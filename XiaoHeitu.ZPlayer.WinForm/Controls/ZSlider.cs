@@ -7,32 +7,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XiaoHeitu.ZPlayer.WinForm.Apis;
+using XiaoHeitu.ZPlayer.WinForm.Events;
 using XiaoHeitu.ZPlayer.WinForm.Properties;
 
 namespace XiaoHeitu.ZPlayer.WinForm.Controls
 {
-    public class ZSlider : SkinControl
+    public class ZSlider : ZControl
     {
-
         private float value = 0;
-        private int railWidth = 10;
+        private int railWidth = 11;
         private Image railImage = Resources.Slider_Rail;
-        private Padding railEdgeInset = new Padding(2);
+        private Padding railEdgeInset = new Padding(6, 5, 6, 5);
         private Image loaderImage = Resources.Slider_Loader;
-        private Padding loaderEdgeInset = new Padding(2);
-        private Size draggerSize = new Size(15, 15);
-        private Image normalDraggerImage = Resources.Pause_Onpress;
-        private Image pressDraggerImage = Resources.Pause_Onpress;
-        private Image hoverDraggerImage = Resources.Pause;
-        private Padding draggerEdgeInset = new Padding(2);
+        private Padding loaderEdgeInset = new Padding(6, 5, 6, 5);
+        private Size draggerSize = new Size(19, 19);
+        private Image normalDraggerImage = Resources.Slider_Dragger_OnPress;
+        private Image pressDraggerImage = Resources.Slider_Dragger_OnPress;
+        private Image hoverDraggerImage = Resources.Slider_Dragger;
+        private Padding draggerEdgeInset = new Padding(0);
         private float loaderValue = 0;
-        private Padding railPadding = new Padding(2);
+        private Padding railPadding = new Padding(0);
 
 
         private bool isDown = false;
         private bool isHover = false;
         private bool isDraggerDown = false;
         private bool isDraggerHover = false;
+
+
+        bool isDragging = false;
+        float lastHoverValue = -1;
 
         [Browsable(true)]
         public float Value
@@ -43,7 +47,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.value != value && !this.isDraggerDown)
                 {
                     this.value = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -56,7 +60,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.draggerSize != value)
                 {
                     this.draggerSize = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -69,7 +73,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.railWidth != value)
                 {
                     this.railWidth = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -82,7 +86,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.normalDraggerImage != value)
                 {
                     this.normalDraggerImage = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -95,7 +99,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.pressDraggerImage != value)
                 {
                     this.pressDraggerImage = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -108,7 +112,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.hoverDraggerImage != value)
                 {
                     this.hoverDraggerImage = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -121,7 +125,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.draggerEdgeInset != value)
                 {
                     this.draggerEdgeInset = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -134,7 +138,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.railImage != value)
                 {
                     this.railImage = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -147,7 +151,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.railEdgeInset != value)
                 {
                     this.railEdgeInset = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -160,7 +164,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.railPadding != value)
                 {
                     this.railPadding = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -174,7 +178,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.loaderValue != value)
                 {
                     this.loaderValue = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -188,7 +192,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.loaderImage != value)
                 {
                     this.loaderImage = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
@@ -202,30 +206,36 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (this.loaderEdgeInset != value)
                 {
                     this.loaderEdgeInset = value;
-                    this.Repaint();
+                    this.Invalidate();
                 }
             }
         }
 
 
 
-        public event Action<object, EventArgs> ValueChanged;
+        public event ValueChangedEventHandler ValueChanged;
+        public event HoverEventHandler Hover;
 
-        private void Repaint()
+        //private void Repaint()
+        //{
+        //    if (this.Size.IsEmpty)
+        //    {
+        //        return;
+        //    }
+        //    this.OnPaint(new PaintEventArgs(this.CreateGraphics(), new Rectangle(0, 0, this.Size.Width, this.Size.Height)));
+        //}
+
+        //public ZSlider() : base()
+        //{
+
+        //}
+
+        protected override void OnPaint(ZPaintContext context)
         {
-
-            if (this.Size.IsEmpty)
-            {
-                return;
-            }
-            this.OnPaint(new PaintEventArgs(this.CreateGraphics(), new Rectangle(0, 0, this.Size.Width, this.Size.Height)));
+            base.OnPaint(context);
+            this.DrawControl(context.Graphics);
         }
 
-        protected override void OnZPaint(PaintEventArgs e)
-        {
-            base.OnZPaint(e);
-            this.DrawControl(e.Graphics);
-        }
 
         Point dragStartPoint;
 
@@ -241,20 +251,20 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             {
                 this.isDraggerDown = false;
             }
-            this.Repaint();
+            this.Invalidate();
             base.OnMouseDown(mevent);
         }
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
             this.isDown = false;
             this.isDraggerDown = false;
-            this.Repaint();
+            this.Invalidate();
             base.OnMouseUp(mevent);
         }
         protected override void OnMouseEnter(EventArgs e)
         {
             this.isHover = true;
-            this.Repaint();
+            this.Invalidate();
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(EventArgs e)
@@ -262,17 +272,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             this.isHover = false;
             this.isDraggerHover = false;
             this.isDraggerDown = false;
-            this.Repaint();
+            this.Invalidate();
             base.OnMouseLeave(e);
         }
 
-        bool isDragging = false;
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            PointF draggerPoint = new PointF((this.Size.Width - this.draggerSize.Width) * this.value, (this.Size.Height - this.draggerSize.Height) / 2f);
-            RectangleF r = new RectangleF(draggerPoint, this.DraggerSize);
 
-            if (r.Contains(e.X, e.Y))
+            PointF draggerPoint = new PointF((this.Size.Width - this.draggerSize.Width) * this.value, (this.Size.Height - this.draggerSize.Height) / 2f);
+            RectangleF draggerRectangle = new RectangleF(draggerPoint, this.DraggerSize);
+
+            if (draggerRectangle.Contains(e.Location))
             {
                 this.isDraggerHover = true;
             }
@@ -280,36 +290,58 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             {
                 this.isDraggerHover = false;
             }
-
+            //滑块事件
             if (this.isDraggerDown)
             {
-                var newValue = (e.X - (this.draggerSize.Width / 2f)) / (float)(this.Size.Width - this.draggerSize.Width);
-
-                //var xoffset = e.X - this.dragStartPoint.X;
-
-                //float valueOffset = xoffset / (float)(this.Size.Width - this.draggerSize.Width);
-                //var newValue = this.value + valueOffset;
-                if (newValue > 1)
-                {
-                    newValue = 1;
-                }
-                if (newValue < 0)
-                {
-                    newValue = 0;
-                }
-                this.value = newValue;
+                var newValue = this.GetValueByPoint(e.Location);
                 if (this.ValueChanged != null)
                 {
-                    this.ValueChanged(this, EventArgs.Empty);
+                    this.ValueChanged(this, new ValueChangedEventArgs(newValue));
                 }
 
+                this.value = newValue;
                 this.dragStartPoint = e.Location;
             }
-            this.Repaint();
+
+
+            //悬停事件
+            //计算滑轨位置位置
+            PointF railPoint = new PointF(this.draggerSize.Width / 2f, (this.Size.Height - this.railWidth) / 2f);
+            //计算滑轨大小
+            Size railSize = new Size(this.Size.Width - this.draggerSize.Width, this.railWidth);
+            RectangleF railRectangle = new RectangleF(railPoint, railSize);
+            if (railRectangle.Contains(e.Location))
+            {
+                //计算悬停值
+                var hoverValue = this.GetValueByPoint(e.Location);
+                //触发事件
+                if (this.Hover != null && hoverValue != this.lastHoverValue)
+                {
+                    this.lastHoverValue = hoverValue;
+                    this.Hover(this, new HoverEventArgs(hoverValue, e.Location));
+                }
+            }
+
+
+            this.Invalidate();
             base.OnMouseMove(e);
         }
 
-        private void DrawControl(Graphics g)
+        private float GetValueByPoint(PointF point)
+        {
+            var value = (point.X - (this.draggerSize.Width / 2f)) / (float)(this.Size.Width - this.draggerSize.Width);
+            if (value > 1)
+            {
+                value = 1;
+            }
+            if (value < 0)
+            {
+                value = 0;
+            }
+            return value;
+        }
+
+        private void DrawControl(ZGraphics g)
         {
             var width = this.Size.Width;
             var height = this.Size.Height;
@@ -318,12 +350,22 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             PointF railPoint = new PointF(this.draggerSize.Width / 2f, (height - this.railWidth) / 2f);
             //计算滑轨大小
             Size railSize = new Size(width - this.draggerSize.Width, this.railWidth);
-
-            //计算滑轨图像
-            var railImage = ImageApi.ImageStretch(this.railImage, this.railEdgeInset, railSize);
-            //开始画
-            g.DrawImage(railImage, railPoint);
-
+            if (railSize.Width > 0 && railSize.Height > 0)
+            {
+                //计算滑轨图像
+                Image railImage = null;
+                if (this.railEdgeInset != Padding.Empty)
+                {
+                    railImage = ImageApi.ImageStretch(this.railImage, this.railEdgeInset, railSize);
+                }
+                else
+                {
+                    railImage = this.railImage;
+                }
+                //开始画
+                //g.DrawImage(railImage, railPoint.X, railPoint.Y, railSize.Width, railSize.Height);
+                g.DrawImage(railImage, new RectangleF(railPoint, railSize), new RectangleF(Point.Empty, railSize), GraphicsUnit.Pixel);
+            }
             //画加载进度
             if (this.loaderValue > 0)
             {
@@ -331,10 +373,24 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 PointF loaderPoint = new PointF(railPoint.X + this.railPadding.Left, railPoint.Y + this.railPadding.Top);
                 //计算加载进度大小
                 Size loaderSize = new Size((int)((railSize.Width - this.railPadding.Left - this.railPadding.Right) * this.loaderValue), railSize.Height - this.railPadding.Top - this.railPadding.Bottom);
-                //计算加载进度图像
-                var loaderImage = ImageApi.ImageStretch(this.loaderImage, this.loaderEdgeInset, loaderSize);
-                //开始画
-                g.DrawImage(loaderImage, loaderPoint);
+                if (loaderSize.Width > 0 && loaderSize.Height > 0)
+                {
+                    //计算加载进度图像
+                    //计算滑轨图像
+
+                    Image loaderImage = null;
+                    if (this.loaderEdgeInset != Padding.Empty)
+                    {
+                        loaderImage = ImageApi.ImageStretch(this.loaderImage, this.loaderEdgeInset, loaderSize);
+                    }
+                    else
+                    {
+                        loaderImage = this.loaderImage;
+                    }
+                    //开始画
+                    //g.DrawImage(loaderImage, loaderPoint.X, loaderPoint.Y, loaderSize.Width, loaderSize.Height);
+                    g.DrawImage(loaderImage, new RectangleF(loaderPoint, loaderSize), new RectangleF(Point.Empty, loaderSize), GraphicsUnit.Pixel);
+                }
             }
 
             //画拖动块
@@ -361,8 +417,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             //开始画
             if (draggerImage != null)
             {
-                g.DrawImage(draggerImage, draggerPoint.X, draggerPoint.Y, this.draggerSize.Width, this.draggerSize.Height);
+                //g.DrawImage(draggerImage, draggerPoint.X, draggerPoint.Y, this.draggerSize.Width, this.draggerSize.Height);
+                g.DrawImage(draggerImage, new RectangleF(draggerPoint, this.draggerSize), new RectangleF(Point.Empty, this.draggerSize), GraphicsUnit.Pixel);
             }
         }
+
     }
 }

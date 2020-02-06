@@ -11,7 +11,7 @@ using XiaoHeitu.ZPlayer.WinForm.Forms;
 
 namespace XiaoHeitu.ZPlayer.WinForm.Controls
 {
-    public class ZImageButton : SkinControl
+    public class ZImageButton : ZControl
     {
 
         private bool isDown = false;
@@ -29,18 +29,18 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         [Browsable(true)]
         public Image HoverImage { get; set; }
 
-        public ZImageButton()
-        {
-        }
+        //public ZImageButton() : base()
+        //{
 
-        protected override void OnZPaint(PaintEventArgs e)
+        //}
+
+        protected override void OnPaint(ZPaintContext context)
         {
-            base.OnZPaint(e);
-            if (this.ClientRectangle == Rectangle.Empty)
+            base.OnPaint(context);
+            if (!this.Visible)
             {
                 return;
             }
-
             Image image = null;
             if (this.isDown && this.PressImage != null)
             {
@@ -60,34 +60,34 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             }
             if (this.ImageEdgeInset != Padding.Empty)
             {
-                image = ImageApi.ImageStretch(image, this.ImageEdgeInset, this.Size);
+                image = ImageApi.ImageStretch(image, this.ImageEdgeInset, this.Size,context.ClipRectangle);
             }
 
-            e.Graphics.DrawImage(image, 0, 0, this.Width, this.Height);
+            context.Graphics.DrawImage(image, context.ClipRectangle, new RectangleF(Point.Empty, image.Size), GraphicsUnit.Pixel);
         }
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             this.isDown = true;
-            this.Refresh();
+            this.Invalidate();
             base.OnMouseDown(mevent);
         }
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
             this.isDown = false;
-            this.Refresh();
+            this.Invalidate();
             base.OnMouseUp(mevent);
         }
         protected override void OnMouseEnter(EventArgs e)
         {
             this.isHover = true;
-            this.Refresh();
+            this.Invalidate();
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
             this.isHover = false;
-            this.Refresh();
+            this.Invalidate();
             base.OnMouseLeave(e);
         }
     }
