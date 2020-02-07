@@ -167,5 +167,38 @@
   <ItemGroup>
     <None Include="Resources\Pause OnPress.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume Rail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Full Screen OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Full Screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Setting OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume Dragger OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume Dragger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume Mute.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

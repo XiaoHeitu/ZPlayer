@@ -73,6 +73,26 @@ namespace XiaoHeitu.ZPlayer.WinForm.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Full_Screen {
+            get {
+                object obj = ResourceManager.GetObject("Full_Screen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Full_Screen_OnPress {
+            get {
+                object obj = ResourceManager.GetObject("Full_Screen_OnPress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Logo {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
@@ -116,6 +136,26 @@ namespace XiaoHeitu.ZPlayer.WinForm.Properties {
         internal static System.Drawing.Bitmap Play_OnPress {
             get {
                 object obj = ResourceManager.GetObject("Play_OnPress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Setting {
+            get {
+                object obj = ResourceManager.GetObject("Setting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Setting_OnPress {
+            get {
+                object obj = ResourceManager.GetObject("Setting_OnPress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +216,76 @@ namespace XiaoHeitu.ZPlayer.WinForm.Properties {
         internal static System.Drawing.Bitmap Stop_OnPress {
             get {
                 object obj = ResourceManager.GetObject("Stop_OnPress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_1 {
+            get {
+                object obj = ResourceManager.GetObject("Volume_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_2 {
+            get {
+                object obj = ResourceManager.GetObject("Volume_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_3 {
+            get {
+                object obj = ResourceManager.GetObject("Volume_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_Dragger {
+            get {
+                object obj = ResourceManager.GetObject("Volume_Dragger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_Dragger_OnPress {
+            get {
+                object obj = ResourceManager.GetObject("Volume_Dragger_OnPress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_Mute {
+            get {
+                object obj = ResourceManager.GetObject("Volume_Mute", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Volume_Rail {
+            get {
+                object obj = ResourceManager.GetObject("Volume_Rail", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

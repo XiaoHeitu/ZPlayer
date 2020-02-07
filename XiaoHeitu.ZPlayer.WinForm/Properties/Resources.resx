@@ -121,6 +121,12 @@
   <data name="Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Background.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Full_Screen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Full Screen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Full_Screen_OnPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Full Screen OnPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +141,12 @@
   </data>
   <data name="Play_OnPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play OnPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Setting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Setting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Setting_OnPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Setting OnPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Slider_Dragger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Slider Dragger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -153,5 +165,26 @@
   </data>
   <data name="Stop_OnPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stop OnPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume 3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_Dragger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume Dragger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_Dragger_OnPress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume Dragger OnPress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_Mute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume Mute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_Rail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume Rail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
