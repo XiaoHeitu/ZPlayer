@@ -51,7 +51,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
             this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
-            this._mediaPlayer.XWindow
 
             //this.videoView1.MediaPlayer = this._mediaPlayer;
 
@@ -166,7 +165,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             // 
             this.btnVolume.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
             this.btnVolume.HoverImage = Resources.Volume_3;
-            this.btnVolume.Location = new Point(522, 6);
+            this.btnVolume.Location = new Point(517, 6);
             this.btnVolume.NormalImage = Resources.Volume_3_OnPress;
             this.btnVolume.PressImage = Resources.Volume_3_OnPress;
             this.btnVolume.Size = new Size(20, 20);
@@ -220,9 +219,27 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnFullScreen.EndInit();
         }
 
+        float fullPosition;
         private void btnFullScreen_Click(object sender, EventArgs e)
         {
-            this._mediaPlayer.ToggleFullscreen();
+            if (this._mediaPlayer.Fullscreen)
+            {
+                this.fullPosition = this._mediaPlayer.Position;
+                this._mediaPlayer.Fullscreen = false;
+                this._mediaPlayer.Stop();
+                this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
+                this._mediaPlayer.Play();
+                this._mediaPlayer.Position = this.fullPosition;
+            }
+            else
+            {
+                this.fullPosition = this._mediaPlayer.Position;
+                this._mediaPlayer.Stop();
+                this._mediaPlayer.Hwnd = IntPtr.Zero;
+                this._mediaPlayer.Play();
+                this._mediaPlayer.Position = this.fullPosition;
+                this._mediaPlayer.Fullscreen = true;
+            }
         }
 
         private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
@@ -233,7 +250,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void btnVolume_Click(object sender, EventArgs e)
         {
-            this._mediaPlayer.Mute = !this._mediaPlayer.Mute;
+            this._mediaPlayer.ToggleMute();
             this.ChangebtnVolumeImage();
         }
         #endregion
@@ -251,7 +268,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             }
             else
             {
-                var index = (int)((this._mediaPlayer.Volume / 100f) / (1f / 3f))+1;
+                var index = (int)((this._mediaPlayer.Volume / 100f) / (1f / 3f)) + 1;
                 if (index > 3)
                 {
                     index = 3;

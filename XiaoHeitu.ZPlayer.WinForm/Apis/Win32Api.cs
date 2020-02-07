@@ -80,7 +80,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
             TernaryRasterOperations dwRop // 光栅的操作值
             );
 
-
+        [DllImport("user32", EntryPoint = "GetDesktopWindow")]
+        public static extern IntPtr GetDesktopWindow();
 
     }
 }
