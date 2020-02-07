@@ -50,6 +50,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.Stopped += this._mediaPlayer_Stopped;
             this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
+            this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
 
             //this.videoView1.MediaPlayer = this._mediaPlayer;
 
@@ -59,12 +60,12 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._preview.Volume = 0;
             this._preview.Hwnd = this.pPreviewHost.Handle;
         }
-
-
-        ZImageButton btnPlay;
-        ZImageButton btnPause;
-        ZImageButton btnStop;
-        ZSlider sldProgress;
+        #region 初始化Z容器
+        private ZImageButton btnPlay;
+        private ZImageButton btnPause;
+        private ZImageButton btnStop;
+        private ZSlider sldProgress;
+        private ZLabel labProgress;
 
         public void InitZContainer()
         {
@@ -72,12 +73,14 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnPause = new ZImageButton();
             this.btnStop = new ZImageButton();
             this.sldProgress = new ZSlider();
+            this.labProgress = new ZLabel();
 
 
             this.btnPlay.BeginInit();
             this.btnPause.BeginInit();
             this.btnStop.BeginInit();
             this.sldProgress.BeginInit();
+            this.labProgress.BeginInit();
 
             // 
             // btnPlay
@@ -143,24 +146,48 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.sldProgress.ValueChanged += new ValueChangedEventHandler(this.sldProgress_ValueChanged);
             this.sldProgress.Hover += new HoverEventHandler(this.sldProgress_Hover);
             this.sldProgress.MouseLeave += new EventHandler(this.sldProgress_MouseLeave);
+            // 
+            // labProgress
+            // 
+            this.labProgress.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Right)));
+            this.labProgress.Location = new Point(310, 8);
+            this.labProgress.Size = new Size(120, 16);
+            this.labProgress.Text = "0:00/0:00";
+            this.labProgress.TextColor = Color.White;
+            this.labProgress.Font = new Font("Microsoft YaHei UI", 9);
+
 
             this.zContainer1.ZControls.Add(this.btnPlay);
             this.zContainer1.ZControls.Add(this.btnPause);
             this.zContainer1.ZControls.Add(this.btnStop);
             this.zContainer1.ZControls.Add(this.sldProgress);
+            this.zContainer1.ZControls.Add(this.labProgress);
 
 
             this.btnPlay.EndInit();
             this.btnPause.EndInit();
             this.btnStop.EndInit();
             this.sldProgress.EndInit();
+            this.labProgress.EndInit();
         }
+        #endregion
+
+        private void _mediaPlayer_LengthChanged(object sender, MediaPlayerLengthChangedEventArgs e)
+        {
+            var timeLength = TimeSpan.FromMilliseconds(e.Length);
+            this.labProgress.Text = $"0:00/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
+        }
+
 
         private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
         {
             this.Invoke(new Action(() =>
             {
                 this.sldProgress.Value = e.Position;
+
+                var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
+                var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length*e.Position); 
+                this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
             }));
         }
         private void _mediaPlayer_EndReached(object sender, EventArgs e)
@@ -209,9 +236,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             if (this.openFD.ShowDialog() == DialogResult.OK)
             {
                 this._mediaPlayer.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
-                this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName), "--noaudio");
-
-                //this._mediaPlayer.Play(new Media(this._libVLC, this.GetStream(this.openFD.FileName)));
+                this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));                
             }
         }
 
@@ -269,7 +294,11 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void sldProgress_ValueChanged(object sender, ValueChangedEventArgs e)
         {
+            var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
+            var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length * e.Value);
+            this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
             this._mediaPlayer.Position = e.Value;
+
         }
 
         private void sldProgress_Hover(object sender, HoverEventArgs e)

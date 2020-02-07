@@ -61,7 +61,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         {
             base.OnPaint(context);
 
-            context.Graphics.DrawString(this.Text, this.Font, new SolidBrush(this.TextColor), new RectangleF(this.Location, this.Size), StringFormat.GenericDefault);
+            context.Graphics.DrawString(this.Text, this.Font, new SolidBrush(this.TextColor), Point.Empty);
         }
     }
 

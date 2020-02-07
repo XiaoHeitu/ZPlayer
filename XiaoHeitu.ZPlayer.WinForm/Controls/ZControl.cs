@@ -61,9 +61,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 this.size = value;
                 this.Invalidate();
             }
-        }         /// <summary>
-                  /// 控件位置
-                  /// </summary>
+        }
+        /// <summary>
+        /// 控件位置
+        /// </summary>
         [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public Point Location

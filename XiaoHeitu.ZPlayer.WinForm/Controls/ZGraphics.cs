@@ -59,5 +59,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             layoutRectangle.Offset(this.zControl.Location);
             this.graphics.DrawString(s, font, brush, layoutRectangle, format);
         }
+        public void DrawString(string s, Font font, Brush brush, Point point)
+        {            
+            point.Offset(this.zControl.Location);
+            this.graphics.DrawString(s, font, brush, point);
+        }
     }
 }
