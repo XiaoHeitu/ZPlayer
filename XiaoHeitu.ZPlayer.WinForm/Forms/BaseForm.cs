@@ -32,7 +32,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         protected override void WndProc(ref Message m)
         {
-            Console.WriteLine($"Window Message: 0x{m.Msg.ToString("X4")},HWnd: {m.HWnd}");
+            //Console.WriteLine($"Window Message: 0x{m.Msg.ToString("X4")},HWnd: {m.HWnd}");
             switch (m.Msg)
             {
                 case Win32Api.WM_NCHITTEST:

@@ -56,7 +56,7 @@
             this.pMoiveHost.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pMoiveHost.Location = new System.Drawing.Point(2, 2);
             this.pMoiveHost.Name = "pMoiveHost";
-            this.pMoiveHost.Size = new System.Drawing.Size(640, 462);
+            this.pMoiveHost.Size = new System.Drawing.Size(640, 461);
             this.pMoiveHost.TabIndex = 9;
             this.pMoiveHost.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pMoiveHost_MouseDown);
             // 
@@ -96,10 +96,12 @@
             this.Controls.Add(this.pMoiveHost);
             this.Controls.Add(this.zContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(480, 330);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.ResumeLayout(false);
+
         }
 
         #endregion

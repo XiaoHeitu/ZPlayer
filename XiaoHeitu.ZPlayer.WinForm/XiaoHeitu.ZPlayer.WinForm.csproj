@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FFD822D0-7F69-4828-A137-267ED828E19D}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>XiaoHeitu.ZPlayer.WinForm</RootNamespace>
     <AssemblyName>ZPlayer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -199,6 +199,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Volume Mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 1 OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 2 OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume 3 OnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Volume Mute OnPress.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -329,6 +329,12 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 this.isDown = true;
                 var e = this.CreateMouseEventArgs(ce);
                 this.OnMouseDown(e);
+
+
+                if (this is ZLabel)
+                {
+                    return false;
+                }
                 return true;
             }
             return false;

@@ -51,14 +51,19 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
             this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
+            this._mediaPlayer.XWindow
 
             //this.videoView1.MediaPlayer = this._mediaPlayer;
 
             this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
 
             this._preview = new MediaPlayer(this._libVLC);
+            this._preview.Mute = true;
             this._preview.Volume = 0;
             this._preview.Hwnd = this.pPreviewHost.Handle;
+
+            //初始值
+            this.sldVolume.Value = this._mediaPlayer.Volume / 100f;
         }
         #region 初始化Z容器
         private ZImageButton btnPlay;
@@ -66,6 +71,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         private ZImageButton btnStop;
         private ZSlider sldProgress;
         private ZLabel labProgress;
+        private ZImageButton btnVolume;
+        private ZSlider sldVolume;
+        private ZImageButton btnFullScreen;
 
         public void InitZContainer()
         {
@@ -74,6 +82,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnStop = new ZImageButton();
             this.sldProgress = new ZSlider();
             this.labProgress = new ZLabel();
+            this.btnVolume = new ZImageButton();
+            this.sldVolume = new ZSlider();
+            this.btnFullScreen = new ZImageButton();
+
 
 
             this.btnPlay.BeginInit();
@@ -81,67 +93,61 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnStop.BeginInit();
             this.sldProgress.BeginInit();
             this.labProgress.BeginInit();
+            this.btnVolume.BeginInit();
+            this.sldVolume.BeginInit();
+            this.btnFullScreen.BeginInit();
 
             // 
             // btnPlay
             // 
-            this.btnPlay.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left)));
+            this.btnPlay.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Left)));
             this.btnPlay.HoverImage = Resources.Play;
-            this.btnPlay.Location = new Point(15, 7);
+            this.btnPlay.Location = new Point(7, 7);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.NormalImage = Resources.Play_OnPress;
             this.btnPlay.PressImage = Resources.Play_OnPress;
             this.btnPlay.Size = new Size(17, 19);
-            //this.btnPlay.TabIndex = 6;
-            //this.btnPlay.Text = "zButton1";
             this.btnPlay.Click += new EventHandler(this.btnPlay_Click);
             // 
             // btnPause
             // 
-            this.btnPause.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left)));
+            this.btnPause.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Left)));
             this.btnPause.HoverImage = Resources.Pause;
-            this.btnPause.Location = new Point(15, 7);
+            this.btnPause.Location = new Point(7, 7);
             this.btnPause.Name = "btnPause";
             this.btnPause.NormalImage = Resources.Pause_OnPress;
             this.btnPause.PressImage = Resources.Pause_OnPress;
             this.btnPause.Size = new Size(17, 19);
-            //this.btnPause.TabIndex = 8;
-            //this.btnPause.Text = "zButton1";
             this.btnPause.Visible = false;
             this.btnPause.Click += new EventHandler(this.btnPause_Click);
             // 
             // btnStop
             // 
+            this.btnStop.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Left)));
             this.btnStop.HoverImage = Resources.Stop;
-            this.btnStop.Location = new Point(36, 9);
-            //this.btnStop.Name = "btnStop";
+            this.btnStop.Location = new Point(29, 9);
             this.btnStop.NormalImage = Resources.Stop_OnPress;
             this.btnStop.PressImage = Resources.Stop_OnPress;
             this.btnStop.Size = new Size(15, 15);
-            //this.btnStop.TabIndex = 0;
-            //this.btnStop.Text = "zImageButton1";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             //
             // sldProgress
             //
-            this.sldProgress.Anchor = ((AnchorStyles)((AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right)));
+            this.sldProgress.Anchor = ((AnchorStyles)((AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right)));
             this.sldProgress.DraggerEdgeInset = new Padding(0);
             this.sldProgress.DraggerSize = new Size(19, 19);
             this.sldProgress.HoverDraggerImage = Resources.Slider_Dragger;
             this.sldProgress.LoaderEdgeInset = new Padding(5, 4, 5, 4);
             this.sldProgress.LoaderImage = Resources.Slider_Loader;
-            this.sldProgress.LoaderValue = 0.5F;
-            this.sldProgress.Location = new Point(68, 6);
+            this.sldProgress.Location = new Point(50, 6);
             this.sldProgress.Name = "sldProgress";
-            this.sldProgress.NormalDraggerImage = Resources.Slider_Dragger;
+            this.sldProgress.NormalDraggerImage = Resources.Slider_Dragger_OnPress;
             this.sldProgress.PressDraggerImage = Resources.Slider_Dragger_OnPress;
             this.sldProgress.RailEdgeInset = new Padding(6, 5, 6, 5);
             this.sldProgress.RailImage = Resources.Slider_Rail;
             this.sldProgress.RailPadding = new Padding(0);
             this.sldProgress.RailWidth = 10;
-            this.sldProgress.Size = new Size(240, 20);
-            //this.sldProgress.TabIndex = 0;
-            //this.sldProgress.Text = "zSlider1";
+            this.sldProgress.Size = new Size(375, 20);
             this.sldProgress.Value = 0F;
             this.sldProgress.ValueChanged += new ValueChangedEventHandler(this.sldProgress_ValueChanged);
             this.sldProgress.Hover += new HoverEventHandler(this.sldProgress_Hover);
@@ -149,12 +155,49 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             // 
             // labProgress
             // 
-            this.labProgress.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Right)));
-            this.labProgress.Location = new Point(310, 8);
-            this.labProgress.Size = new Size(120, 16);
+            this.labProgress.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
+            this.labProgress.Location = new Point(422, 8);
+            this.labProgress.Size = new Size(85, 16);
             this.labProgress.Text = "0:00/0:00";
             this.labProgress.TextColor = Color.White;
             this.labProgress.Font = new Font("Microsoft YaHei UI", 9);
+            // 
+            // btnVolume
+            // 
+            this.btnVolume.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
+            this.btnVolume.HoverImage = Resources.Volume_3;
+            this.btnVolume.Location = new Point(522, 6);
+            this.btnVolume.NormalImage = Resources.Volume_3_OnPress;
+            this.btnVolume.PressImage = Resources.Volume_3_OnPress;
+            this.btnVolume.Size = new Size(20, 20);
+            this.btnVolume.Click += new System.EventHandler(this.btnVolume_Click);
+            // 
+            // sldVolume
+            // 
+            this.sldVolume.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
+            this.sldVolume.DraggerEdgeInset = new Padding(0);
+            this.sldVolume.DraggerSize = new Size(17, 15);
+            this.sldVolume.HoverDraggerImage = Resources.Volume_Dragger;
+            this.sldVolume.Location = new Point(537, 10);
+            this.sldVolume.Name = "sldVolume";
+            this.sldVolume.NormalDraggerImage = Resources.Volume_Dragger_OnPress;
+            this.sldVolume.PressDraggerImage = Resources.Volume_Dragger_OnPress;
+            this.sldVolume.RailEdgeInset = new Padding(5, 4, 5, 4);
+            this.sldVolume.RailImage = Resources.Volume_Rail;
+            this.sldVolume.RailWidth = 9;
+            this.sldVolume.Size = new Size(70, 15);
+            this.sldVolume.ValueChanged += this.SldVolume_ValueChanged;
+            // 
+            // btnFullScreen
+            // 
+            this.btnFullScreen.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
+            this.btnFullScreen.HoverImage = Resources.Full_Screen;
+            this.btnFullScreen.Location = new Point(615, 8);
+            this.btnFullScreen.NormalImage = Resources.Full_Screen_OnPress;
+            this.btnFullScreen.PressImage = Resources.Full_Screen_OnPress;
+            this.btnFullScreen.Size = new Size(15, 17);
+            this.btnFullScreen.Click += new System.EventHandler(this.btnFullScreen_Click);
+
 
 
             this.zContainer1.ZControls.Add(this.btnPlay);
@@ -162,6 +205,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.zContainer1.ZControls.Add(this.btnStop);
             this.zContainer1.ZControls.Add(this.sldProgress);
             this.zContainer1.ZControls.Add(this.labProgress);
+            this.zContainer1.ZControls.Add(this.btnVolume);
+            this.zContainer1.ZControls.Add(this.sldVolume);
+            this.zContainer1.ZControls.Add(this.btnFullScreen);
 
 
             this.btnPlay.EndInit();
@@ -169,9 +215,53 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnStop.EndInit();
             this.sldProgress.EndInit();
             this.labProgress.EndInit();
+            this.btnVolume.EndInit();
+            this.sldVolume.EndInit();
+            this.btnFullScreen.EndInit();
+        }
+
+        private void btnFullScreen_Click(object sender, EventArgs e)
+        {
+            this._mediaPlayer.ToggleFullscreen();
+        }
+
+        private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            this._mediaPlayer.Volume = (int)(e.Value * 100);
+            this.ChangebtnVolumeImage();
+        }
+
+        private void btnVolume_Click(object sender, EventArgs e)
+        {
+            this._mediaPlayer.Mute = !this._mediaPlayer.Mute;
+            this.ChangebtnVolumeImage();
         }
         #endregion
 
+        /// <summary>
+        /// 改变音量按钮图标
+        /// </summary>
+        private void ChangebtnVolumeImage()
+        {
+            if (this._mediaPlayer.Mute)
+            {
+                this.btnVolume.NormalImage = Resources.Volume_Mute_OnPress;
+                this.btnVolume.HoverImage = Resources.Volume_Mute;
+                this.btnVolume.PressImage = Resources.Volume_Mute_OnPress;
+            }
+            else
+            {
+                var index = (int)((this._mediaPlayer.Volume / 100f) / (1f / 3f))+1;
+                if (index > 3)
+                {
+                    index = 3;
+                }
+
+                this.btnVolume.NormalImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
+                this.btnVolume.HoverImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}");
+                this.btnVolume.PressImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
+            }
+        }
         private void _mediaPlayer_LengthChanged(object sender, MediaPlayerLengthChangedEventArgs e)
         {
             var timeLength = TimeSpan.FromMilliseconds(e.Length);
@@ -186,7 +276,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.sldProgress.Value = e.Position;
 
                 var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
-                var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length*e.Position); 
+                var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length * e.Position);
                 this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
             }));
         }
@@ -236,7 +326,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             if (this.openFD.ShowDialog() == DialogResult.OK)
             {
                 this._mediaPlayer.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
-                this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));                
+                this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
             }
         }
 

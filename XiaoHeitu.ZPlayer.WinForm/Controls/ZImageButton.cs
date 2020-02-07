@@ -16,21 +16,66 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
         private bool isDown = false;
         private bool isHover = false;
+        private Padding imageEdgeInset = Padding.Empty;
+        private Image normalImage;
+        private Image pressImage;
+        private Image hoverImage;
 
-
         [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
-        private Padding ImageEdgeInset { get; set; } = Padding.Empty;
-
+        private Padding ImageEdgeInset
+        {
+            get
+            {
+                return this.imageEdgeInset;
+            }
+            set
+            {
+                this.imageEdgeInset = value;
+            }
+        }
         [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
-        public Image NormalImage { get; set; }
+        public Image NormalImage
+        {
+            get
+            {
+                return this.normalImage;
+            }
+            set
+            {
+                this.normalImage = value;
+                this.Invalidate();
+            }
+        }
         [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
-        public Image PressImage { get; set; }
+        public Image PressImage
+        {
+            get
+            {
+                return this.pressImage;
+            }
+            set
+            {
+                this.pressImage = value;
+                this.Invalidate();
+            }
+        }
         [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
-        public Image HoverImage { get; set; }
+        public Image HoverImage
+        {
+            get
+            {
+                return this.hoverImage;
+            }
+            set
+            {
+                this.hoverImage = value;
+                this.Invalidate();
+            }
+        }
 
         //public ZImageButton() : base()
         //{
