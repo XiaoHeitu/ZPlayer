@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Apis\ImageApi.cs" />
     <Compile Include="Apis\Win32Api.cs" />
+    <Compile Include="Controls\ZLabel.cs" />
     <Compile Include="Controls\ZControlCollection.cs" />
     <Compile Include="Controls\ZControl.cs" />
     <Compile Include="Controls\ZContainer.cs">

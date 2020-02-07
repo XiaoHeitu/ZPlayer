@@ -44,5 +44,20 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             destRect.Offset(this.zControl.Location);
             this.graphics.DrawImage(image, destRect, srcRect, srcUnit);
         }
+
+        /// <summary>
+        /// 使用指定 System.Drawing.StringFormat 的格式化特性，用指定的 System.Drawing.Brush 和 System.Drawing.Font 对象在指定的矩形中绘制指定的文本字符串。
+        /// </summary>
+        /// <param name="s">要绘制的字符串。</param>
+        /// <param name="font">System.Drawing.Font，它定义字符串的文本格式。</param>
+        /// <param name="brush">System.Drawing.Brush，它确定所绘制文本的颜色和纹理。</param>
+        /// <param name="layoutRectangle">System.Drawing.RectangleF 结构，它指定所绘制文本的位置。</param>
+        /// <param name="format">System.Drawing.StringFormat，它指定应用于所绘制文本的格式化特性（如行距和对齐方式）。</param>
+        /// <exception cref="System.ArgumentNullException">brush 为 null。 或 - s 为 null。</exception>
+        public void DrawString(string s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat format)
+        {
+            layoutRectangle.Offset(this.zControl.Location);
+            this.graphics.DrawString(s, font, brush, layoutRectangle, format);
+        }
     }
 }

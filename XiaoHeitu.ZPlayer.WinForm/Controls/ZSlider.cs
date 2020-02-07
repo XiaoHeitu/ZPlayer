@@ -34,8 +34,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         private bool isDraggerDown = false;
         private bool isDraggerHover = false;
 
-
-        bool isDragging = false;
         float lastHoverValue = -1;
 
         [Browsable(true)]
@@ -216,19 +214,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         public event ValueChangedEventHandler ValueChanged;
         public event HoverEventHandler Hover;
 
-        //private void Repaint()
-        //{
-        //    if (this.Size.IsEmpty)
-        //    {
-        //        return;
-        //    }
-        //    this.OnPaint(new PaintEventArgs(this.CreateGraphics(), new Rectangle(0, 0, this.Size.Width, this.Size.Height)));
-        //}
 
-        //public ZSlider() : base()
-        //{
-
-        //}
 
         protected override void OnPaint(ZPaintContext context)
         {
@@ -287,7 +273,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         {
             this.isHover = false;
             this.isDraggerHover = false;
-            this.isDraggerDown = false;
+
             this.Invalidate();
             base.OnMouseLeave(e);
         }
@@ -313,7 +299,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 this.OnValueChanged(newValue);
 
                 this.value = newValue;
-                //this.dragStartPoint = e.Location;
             }
 
 

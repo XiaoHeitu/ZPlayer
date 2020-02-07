@@ -19,13 +19,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
 
         [Browsable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         private Padding ImageEdgeInset { get; set; } = Padding.Empty;
 
         [Browsable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public Image NormalImage { get; set; }
         [Browsable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public Image PressImage { get; set; }
         [Browsable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public Image HoverImage { get; set; }
 
         //public ZImageButton() : base()
@@ -55,7 +59,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             }
             if (this.ImageEdgeInset != Padding.Empty)
             {
-                image = ImageApi.ImageStretch(image, this.ImageEdgeInset, this.Size,context.ClipRectangle);
+                image = ImageApi.ImageStretch(image, this.ImageEdgeInset, this.Size, context.ClipRectangle);
             }
 
             context.Graphics.DrawImage(image, context.ClipRectangle, new RectangleF(Point.Empty, image.Size), GraphicsUnit.Pixel);

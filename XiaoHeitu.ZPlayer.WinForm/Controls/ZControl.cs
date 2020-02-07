@@ -20,10 +20,14 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         bool isDown = false;
         bool isInit = false;
         Rectangle AnchorRect = Rectangle.Empty;
+        private bool visible = true;
+        private Size size = new Size(20, 20);
+        private Point location;
 
         /// <summary>
         /// 名称
         /// </summary>
+        [Browsable(true)]
         public string Name
         {
             get; set;
@@ -44,24 +48,42 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// <summary>
         /// 控件尺寸
         /// </summary>
+        [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public Size Size
         {
-            get; set;
-        } = new Size(20, 20);
-        /// <summary>
-        /// 控件位置
-        /// </summary>
+            get
+            {
+                return this.size;
+            }
+            set
+            {
+                this.size = value;
+                this.Invalidate();
+            }
+        }         /// <summary>
+                  /// 控件位置
+                  /// </summary>
+        [Browsable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public Point Location
         {
-            get; set;
+            get
+            {
+                return this.location;
+            }
+            set
+            {
+                this.location = value;
+                this.Invalidate();
+            }
         }
 
 
         /// <summary>
         /// 获取或设置控件绑定到的容器的边缘并确定控件如何随其父级一起调整大小。
         /// </summary>
+        [Browsable(true)]
         [DefaultValue(AnchorStyles.Top | AnchorStyles.Left)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public AnchorStyles Anchor
@@ -73,14 +95,21 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// <summary>
         /// 获取或设置控件绑定到的容器的边缘并确定控件如何随其父级一起调整大小。
         /// </summary>
+        [Browsable(true)]
         [DefaultValue(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         public bool Visible
         {
-            get;
-            set;
-        } = true;
-
+            get
+            {
+                return this.visible;
+            }
+            set
+            {
+                this.visible = value;
+                this.Invalidate();
+            }
+        }
         public event EventHandler Click;
         public event EventHandler MouseLeave;
         /// <summary>
@@ -120,10 +149,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
         protected virtual void OnPaint(ZPaintContext context)
         {
-            this.ResumeLayout();
+            //this.DoLayout();
         }
 
-        private void ResumeLayout()
+        public void DoLayout()
         {
             int x, y, width, height;
             if (this.Anchor.HasFlag(AnchorStyles.Left) && this.Anchor.HasFlag(AnchorStyles.Right))
@@ -312,7 +341,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         public bool DoMouseUp(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
-            if (rect.Contains(ce.Location))
+            if (rect.Contains(ce.Location) || this.isDown)
             {
                 this.isDown = false;
                 var e = this.CreateMouseEventArgs(ce);
@@ -334,9 +363,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 if (!this.isHover)
                 {
                     this.isHover = true;
-                    this.OnMouseEnter(EventArgs.Empty); 
+                    this.OnMouseEnter(EventArgs.Empty);
                     return true;
-                }               
+                }
             }
             return false;
         }
@@ -353,7 +382,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 {
                     this.isHover = false;
                     this.OnMouseLeave(EventArgs.Empty);
-                return true;
+                    return true;
                 }
             }
             return false;
@@ -365,7 +394,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         public virtual bool DoMouseMove(MouseEventArgs ce)
         {
             var rect = new Rectangle(this.Location, this.Size);
-            if (rect.Contains(ce.Location))
+            if (rect.Contains(ce.Location) || this.isDown)
             {
                 var e = this.CreateMouseEventArgs(ce);
                 this.OnMouseMove(e);

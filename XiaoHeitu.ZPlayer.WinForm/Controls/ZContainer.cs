@@ -46,9 +46,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             this.ZControls = new ZControlCollection(this);
         }
 
-
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            base.OnLayout(levent);
+            foreach (var control in this.ZControls)
+            {
+                control.DoLayout();
+            }
+        }
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            Console.WriteLine($"OnMouseDown:{e.Location}");
             bool handler = false;
             foreach (var control in this.ZControls)
             {
@@ -62,6 +70,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            Console.WriteLine($"OnMouseUp:{e.Location}");
             bool handler = false;
             foreach (var control in this.ZControls)
             {
@@ -77,6 +86,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            Console.WriteLine($"OnMouseMove:{e.Location}");
             bool handler = false;
             foreach (var control in this.ZControls)
             {

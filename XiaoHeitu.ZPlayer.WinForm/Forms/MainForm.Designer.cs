@@ -100,16 +100,11 @@
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.ResumeLayout(false);
-
         }
 
         #endregion
         private System.Windows.Forms.Button button1;
-        //private Controls.ZImageButton btnPlay;
-        //private Controls.ZImageButton btnPause;
         private System.Windows.Forms.Panel pMoiveHost;
-        //private Controls.ZImageButton btnStop;
-        //private Controls.ZSlider sldProgress;
         private System.Windows.Forms.Panel pPreviewHost;
         private Controls.ZContainer zContainer1;
     }
