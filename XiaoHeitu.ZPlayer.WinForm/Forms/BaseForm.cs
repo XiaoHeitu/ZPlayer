@@ -25,9 +25,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.SetStyle(ControlStyles.Opaque, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-
-            this.MaximumSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
-            //this.MinimumSize = new Size(this.Width, this.Height);//窗体改变大小时最小限定在初始化大小            
+          
         }
 
         protected override void WndProc(ref Message m)

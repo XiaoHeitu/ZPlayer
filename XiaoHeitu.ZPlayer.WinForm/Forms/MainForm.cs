@@ -63,6 +63,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
             //初始值
             this.sldVolume.Value = this._mediaPlayer.Volume / 100f;
+
+            this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
+            //this.MinimumSize = new Size(this.Width, this.Height);//窗体改变大小时最小限定在初始化大小  
         }
         #region 初始化Z容器
         private ZImageButton btnPlay;
@@ -219,27 +222,32 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnFullScreen.EndInit();
         }
 
-        float fullPosition;
+        FormWindowState tempWindowState = FormWindowState.Normal;
+        bool isFullscreen = false;
         private void btnFullScreen_Click(object sender, EventArgs e)
         {
-            if (this._mediaPlayer.Fullscreen)
+            if (this.isFullscreen)
             {
-                this.fullPosition = this._mediaPlayer.Position;
-                this._mediaPlayer.Fullscreen = false;
-                this._mediaPlayer.Stop();
-                this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
-                this._mediaPlayer.Play();
-                this._mediaPlayer.Position = this.fullPosition;
+                this.WindowState = this.tempWindowState;
+                this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
+                this.isFullscreen = false;
             }
             else
             {
-                this.fullPosition = this._mediaPlayer.Position;
-                this._mediaPlayer.Stop();
-                this._mediaPlayer.Hwnd = IntPtr.Zero;
-                this._mediaPlayer.Play();
-                this._mediaPlayer.Position = this.fullPosition;
-                this._mediaPlayer.Fullscreen = true;
+                this.tempWindowState = this.WindowState;
+                this.MaximumSize = Size.Empty;
+                this.WindowState = FormWindowState.Maximized;
+                this.isFullscreen = true;
             }
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+            {
+                this.isFullscreen=false;
+            }
+            base.OnSizeChanged(e);
         }
 
         private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
