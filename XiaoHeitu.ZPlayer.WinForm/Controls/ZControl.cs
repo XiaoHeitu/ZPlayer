@@ -395,6 +395,20 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             return false;
         }
         /// <summary>
+        /// OnMouseMove-->DoMouseLeave
+        /// </summary>
+        /// <param name="e"></param>
+        public bool DoMouseLeave(EventArgs ce)
+        {
+            if (this.isHover)
+            {
+                this.isHover = false;
+                this.OnMouseLeave(EventArgs.Empty);
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
         /// OnMouseMove-->DoMouseMove
         /// </summary>
         /// <param name="e"></param>
@@ -415,8 +429,12 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
         /// <param name="e"></param>
         public virtual bool DoClick(MouseEventArgs ce)
         {
+            if (ce.Button != MouseButtons.Left)
+            {
+                return false;
+            }
             var rect = new Rectangle(this.Location, this.Size);
-            if (rect.Contains(ce.Location))
+            if (rect.Contains(ce.Location) && this.isDown)
             {
                 this.OnClick(EventArgs.Empty);
                 return true;

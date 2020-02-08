@@ -93,6 +93,13 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
         //[DllImport("user32.dll", EntryPoint = "GetWindowTextLength")]
         //public static extern int GetWindowTextLength(IntPtr hWnd);
         //[DllImport("User32.dll", CharSet = CharSet.Auto)]
-        //public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int nMaxCount);
+        //public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int nMaxCount); 
+        /// <summary>
+        /// 设置鼠标状态的计数器（非状态）
+        /// </summary>
+        /// <param name="bShow">状态</param>
+        /// <returns>状态技术</returns>
+        [DllImport("user32.dll", EntryPoint = "ShowCursor", CharSet = CharSet.Auto)]
+        public static extern int ShowCursor(bool bShow);
     }
 }

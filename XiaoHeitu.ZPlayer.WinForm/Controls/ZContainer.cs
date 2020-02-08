@@ -74,8 +74,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             bool handler = false;
             foreach (var control in this.ZControls)
             {
-                handler |= control.DoMouseUp(e);
                 handler |= control.DoClick(e);
+                handler |= control.DoMouseUp(e);
             }
             if (handler)
             {
@@ -99,6 +99,19 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
                 return;
             }
             base.OnMouseMove(e);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            bool handler = false;
+            foreach (var control in this.ZControls)
+            {
+                handler |= control.DoMouseLeave(e);
+            }
+            if (handler)
+            {
+                return;
+            }
+            base.OnMouseLeave(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)

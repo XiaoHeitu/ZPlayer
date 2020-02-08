@@ -9,7 +9,10 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormAnimation;
 using XiaoHeitu.ZPlayer.WinForm.Apis;
 using XiaoHeitu.ZPlayer.WinForm.Controls;
 using XiaoHeitu.ZPlayer.WinForm.Events;
@@ -28,6 +31,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         FormWindowState tempWindowState = FormWindowState.Normal;
         bool isFullscreen = false;
+
+        float replayPosition = 0;
 
         /// <summary>
         /// Initializes a new instance of the Form1 class
@@ -56,21 +61,28 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
             this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
-
-            //this.videoView1.MediaPlayer = this._mediaPlayer;
-
             this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
 
             this._preview = new MediaPlayer(this._libVLC);
+            this._preview.EnableMouseInput = false;
+            this._preview.EnableKeyInput = false;
             this._preview.Mute = true;
             this._preview.Volume = 0;
+            this._preview.EnableHardwareDecoding = true;
             this._preview.Hwnd = this.pPreviewHost.Handle;
 
             //初始值
             this.sldVolume.Value = this._mediaPlayer.Volume / 100f;
 
-            this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
+            //this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
             //this.MinimumSize = new Size(this.Width, this.Height);//窗体改变大小时最小限定在初始化大小  
+        }
+        public MainForm(string fileName) : this()
+        {
+            if (!string.IsNullOrWhiteSpace(fileName))
+            {
+                this.Play(fileName);
+            }
         }
         #region 初始化Z容器
         private ZImageButton btnPlay;
@@ -299,14 +311,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         #endregion
 
         #region 控制器事件
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (this.openFD.ShowDialog() == DialogResult.OK)
-            {
-                this._mediaPlayer.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
-                this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
-            }
-        }
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
@@ -373,18 +377,69 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void zContainer1_MouseDown(object sender, MouseEventArgs e)
         {
-            Win32Api.ReleaseCapture();
-            Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+            if (e.Button == MouseButtons.Left)
+            {
+                Win32Api.ReleaseCapture();
+                Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+            }
         }
 
         private void pMoiveHost_MouseDown(object sender, MouseEventArgs e)
         {
-            Win32Api.ReleaseCapture();
-            Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+            if (e.Button == MouseButtons.Left)
+            {
+                this.TogglePlayOrPause();
+                if (e.Clicks == 2)
+                {
+                    this.ToggleFullscreen();
+                }
+                Win32Api.ReleaseCapture();
+                Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+            }
+        }
+        #endregion
+
+        #region 菜单事件
+
+        private void miExit_Click(object sender, EventArgs e)
+        {
+            this._mediaPlayer.Stop();
+            Application.Exit();
+        }
+
+        private void miOpenFile_Click(object sender, EventArgs e)
+        {
+            if (this.openFD.ShowDialog() == DialogResult.OK)
+            {
+                this.Play(this.openFD.FileName);
+            }
+        }
+
+        private void miHardwareDecoding_Click(object sender, EventArgs e)
+        {
+            this.miHardwareDecoding.Checked = !this.miHardwareDecoding.Checked;
+            this._mediaPlayer.EnableHardwareDecoding = this.miHardwareDecoding.Checked;
+
+            this.Replay();
         }
         #endregion
 
         #region 方法
+
+
+        private void Replay()
+        {
+            this.replayPosition = this._mediaPlayer.Position;
+            this._mediaPlayer.Stop();
+
+            this._mediaPlayer.Play();
+            this._mediaPlayer.Position = this.replayPosition;
+        }
+        private void Play(string fileName)
+        {
+            this._preview.Media = new Media(this._libVLC, this.GetStream(fileName));
+            this._mediaPlayer.Play(new Media(this._libVLC, this.GetStream(fileName)));
+        }
         /// <summary>
         /// 改变音量按钮图标
         /// </summary>
@@ -420,6 +475,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.WindowState = this.tempWindowState;
                 this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
                 this.isFullscreen = false;
+
+                this.pMoiveHost.SetBounds(2, 2, this.ClientSize.Width - 4, this.Height - this.zContainer1.Height - 4);
+                this.zContainer1.Visible = true;
             }
             else
             {
@@ -427,6 +485,11 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.MaximumSize = Size.Empty;
                 this.WindowState = FormWindowState.Maximized;
                 this.isFullscreen = true;
+
+
+
+                this.pMoiveHost.Bounds = this.ClientRectangle;
+                this.zContainer1.Visible = false;
             }
         }
 
@@ -453,7 +516,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         private Stream GetStream(string filename)
         {
             Stream result = null;
-            var ext = Path.GetExtension(filename);
+            var ext = System.IO.Path.GetExtension(filename);
             switch (ext.ToUpper())
             {
                 case ".ZIP":
@@ -486,5 +549,58 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             return result;
         }
         #endregion
+
+        Point lastLocation = Point.Empty;
+        BackgroundWorker lastWorker = null;
+        private void pMoiveHost_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.isFullscreen && this.lastLocation != e.Location)
+            {
+                Cursor.Show();
+                this.zContainer1.Visible = true;
+                if (this.lastWorker != null)
+                {
+                    this.lastWorker.CancelAsync();
+                }
+                this.lastWorker = new BackgroundWorker();
+                this.lastWorker.WorkerSupportsCancellation = true;
+                this.lastWorker.DoWork += (ss, ee) =>
+                {
+                    for (int i = 0; i < 2000; i++)
+                    {
+                        Thread.Sleep(1);
+                        if (((BackgroundWorker)ss).CancellationPending)
+                        {
+                            ee.Cancel = true;
+                            return;
+                        }
+                    }
+                };
+                this.lastWorker.RunWorkerCompleted += (ss, ee) =>
+                {
+                    if (ee.Cancelled || !this.isFullscreen)
+                    {
+                        return;
+                    }
+                    this.Invoke(new Action(() =>
+                    {
+                        Cursor.Hide();
+                        this.zContainer1.Visible = false;
+                    }));
+                };
+                this.lastWorker.RunWorkerAsync();
+            }
+
+            this.lastLocation = e.Location;
+        }
+
+        private void zContainer1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.lastWorker != null)
+            {
+                this.lastWorker.CancelAsync();
+            }
+        }
+
     }
 }

@@ -235,20 +235,24 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
-            this.isDown = true;
-            if (this.isDraggerHover)
+            if (mevent.Button == MouseButtons.Left)
+            {
+                this.isDown = true;
+            }
+            if (this.isDraggerHover && mevent.Button == MouseButtons.Left)
             {
                 this.isDraggerDown = true;
-                //this.dragStartPoint = mevent.Location;
             }
             else
             {
                 this.isDraggerDown = false;
+                if (mevent.Button == MouseButtons.Left)
+                {
+                    var newValue = this.GetValueByPoint(mevent.Location);
+                    this.OnValueChanged(newValue);
 
-                var newValue = this.GetValueByPoint(mevent.Location);
-                this.OnValueChanged(newValue);
-
-                this.value = newValue;
+                    this.value = newValue;
+                }
             }
 
 

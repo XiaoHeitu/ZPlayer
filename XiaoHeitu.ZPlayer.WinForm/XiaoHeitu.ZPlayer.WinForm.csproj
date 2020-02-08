@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FFD822D0-7F69-4828-A137-267ED828E19D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>XiaoHeitu.ZPlayer.WinForm</RootNamespace>
     <AssemblyName>ZPlayer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -129,6 +129,9 @@
     </PackageReference>
     <PackageReference Include="VideoLAN.LibVLC.Windows">
       <Version>3.0.8.1</Version>
+    </PackageReference>
+    <PackageReference Include="WinFormAnimation">
+      <Version>1.6.0.4</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
