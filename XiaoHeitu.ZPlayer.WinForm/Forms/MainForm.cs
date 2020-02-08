@@ -25,6 +25,10 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         MediaPlayer _mediaPlayer;
         MediaPlayer _preview;
 
+
+        FormWindowState tempWindowState = FormWindowState.Normal;
+        bool isFullscreen = false;
+
         /// <summary>
         /// Initializes a new instance of the Form1 class
         /// </summary>
@@ -43,7 +47,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
             this._libVLC = new LibVLC();
             this._mediaPlayer = new MediaPlayer(this._libVLC);
-            this._mediaPlayer.EnableMouseInput = true;
+            this._mediaPlayer.EnableMouseInput = false;
+            this._mediaPlayer.EnableKeyInput = false;
 
             this._mediaPlayer.Paused += this._mediaPlayer_Paused;
             this._mediaPlayer.Playing += this._mediaPlayer_Playing;
@@ -222,77 +227,24 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.btnFullScreen.EndInit();
         }
 
-        FormWindowState tempWindowState = FormWindowState.Normal;
-        bool isFullscreen = false;
-        private void btnFullScreen_Click(object sender, EventArgs e)
-        {
-            if (this.isFullscreen)
-            {
-                this.WindowState = this.tempWindowState;
-                this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
-                this.isFullscreen = false;
-            }
-            else
-            {
-                this.tempWindowState = this.WindowState;
-                this.MaximumSize = Size.Empty;
-                this.WindowState = FormWindowState.Maximized;
-                this.isFullscreen = true;
-            }
-        }
+        #endregion
+
 
         protected override void OnSizeChanged(EventArgs e)
         {
             if (this.WindowState != FormWindowState.Maximized)
             {
-                this.isFullscreen=false;
+                this.isFullscreen = false;
             }
             base.OnSizeChanged(e);
         }
 
-        private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
-        {
-            this._mediaPlayer.Volume = (int)(e.Value * 100);
-            this.ChangebtnVolumeImage();
-        }
-
-        private void btnVolume_Click(object sender, EventArgs e)
-        {
-            this._mediaPlayer.ToggleMute();
-            this.ChangebtnVolumeImage();
-        }
-        #endregion
-
-        /// <summary>
-        /// 改变音量按钮图标
-        /// </summary>
-        private void ChangebtnVolumeImage()
-        {
-            if (this._mediaPlayer.Mute)
-            {
-                this.btnVolume.NormalImage = Resources.Volume_Mute_OnPress;
-                this.btnVolume.HoverImage = Resources.Volume_Mute;
-                this.btnVolume.PressImage = Resources.Volume_Mute_OnPress;
-            }
-            else
-            {
-                var index = (int)((this._mediaPlayer.Volume / 100f) / (1f / 3f)) + 1;
-                if (index > 3)
-                {
-                    index = 3;
-                }
-
-                this.btnVolume.NormalImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
-                this.btnVolume.HoverImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}");
-                this.btnVolume.PressImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
-            }
-        }
+        #region MediaPlayer事件
         private void _mediaPlayer_LengthChanged(object sender, MediaPlayerLengthChangedEventArgs e)
         {
             var timeLength = TimeSpan.FromMilliseconds(e.Length);
             this.labProgress.Text = $"0:00/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
         }
-
 
         private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
         {
@@ -305,6 +257,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
             }));
         }
+
         private void _mediaPlayer_EndReached(object sender, EventArgs e)
         {
             this.Invoke(new Action(() =>
@@ -314,7 +267,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.sldProgress.Value = 0;
             }));
         }
-
 
         private void _mediaPlayer_Stopped(object sender, EventArgs e)
         {
@@ -344,8 +296,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             }));
 
         }
+        #endregion
 
-
+        #region 控制器事件
         private void button1_Click(object sender, EventArgs e)
         {
             if (this.openFD.ShowDialog() == DialogResult.OK)
@@ -354,39 +307,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this._preview.Media = new Media(this._libVLC, this.GetStream(this.openFD.FileName));
             }
         }
-
-
-        private Stream GetStream(string filename)
-        {
-            Stream result = null;
-            var ext = Path.GetExtension(filename);
-            switch (ext.ToUpper())
-            {
-                case ".ZIP":
-                    {
-                        result = this.GetZipStream(filename);
-                        break;
-                    }
-                default:
-                    {
-                        result = File.OpenRead(filename);
-                        break;
-                    }
-            }
-
-            return result;
-        }
-
-        private Stream GetZipStream(string filename)
-        {
-            Stream result = null;
-            FileStream zipToOpen = File.OpenRead(filename);
-            ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read);
-            var entry = archive.Entries[0];
-            result = entry.Open();
-            return result;
-        }
-
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
@@ -413,7 +333,6 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length * e.Value);
             this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
             this._mediaPlayer.Position = e.Value;
-
         }
 
         private void sldProgress_Hover(object sender, HoverEventArgs e)
@@ -435,6 +354,23 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this.pPreviewHost.Visible = false;
         }
 
+        private void btnFullScreen_Click(object sender, EventArgs e)
+        {
+            this.ToggleFullscreen();
+        }
+
+        private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            this._mediaPlayer.Volume = (int)(e.Value * 100);
+            this.ChangebtnVolumeImage();
+        }
+
+        private void btnVolume_Click(object sender, EventArgs e)
+        {
+            this._mediaPlayer.ToggleMute();
+            this.ChangebtnVolumeImage();
+        }
+
         private void zContainer1_MouseDown(object sender, MouseEventArgs e)
         {
             Win32Api.ReleaseCapture();
@@ -446,5 +382,109 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             Win32Api.ReleaseCapture();
             Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
         }
+        #endregion
+
+        #region 方法
+        /// <summary>
+        /// 改变音量按钮图标
+        /// </summary>
+        private void ChangebtnVolumeImage()
+        {
+            if (this._mediaPlayer.Mute)
+            {
+                this.btnVolume.NormalImage = Resources.Volume_Mute_OnPress;
+                this.btnVolume.HoverImage = Resources.Volume_Mute;
+                this.btnVolume.PressImage = Resources.Volume_Mute_OnPress;
+            }
+            else
+            {
+                var index = (int)((this._mediaPlayer.Volume / 100f) / (1f / 3f)) + 1;
+                if (index > 3)
+                {
+                    index = 3;
+                }
+
+                this.btnVolume.NormalImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
+                this.btnVolume.HoverImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}");
+                this.btnVolume.PressImage = (Bitmap)Resources.ResourceManager.GetObject($"Volume_{index}_OnPress");
+            }
+        }
+
+        /// <summary>
+        /// 切换全屏
+        /// </summary>
+        private void ToggleFullscreen()
+        {
+            if (this.isFullscreen)
+            {
+                this.WindowState = this.tempWindowState;
+                this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
+                this.isFullscreen = false;
+            }
+            else
+            {
+                this.tempWindowState = this.WindowState;
+                this.MaximumSize = Size.Empty;
+                this.WindowState = FormWindowState.Maximized;
+                this.isFullscreen = true;
+            }
+        }
+
+        /// <summary>
+        /// 切换播放暂停
+        /// </summary>
+        private void TogglePlayOrPause()
+        {
+            if (this._mediaPlayer.IsPlaying)
+            {
+                this._mediaPlayer.Pause();
+            }
+            else
+            {
+                this._mediaPlayer.Play();
+            }
+        }
+
+        /// <summary>
+        /// 获取媒体流
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private Stream GetStream(string filename)
+        {
+            Stream result = null;
+            var ext = Path.GetExtension(filename);
+            switch (ext.ToUpper())
+            {
+                case ".ZIP":
+                    {
+                        result = this.GetZipStream(filename);
+                        break;
+                    }
+                default:
+                    {
+                        result = File.OpenRead(filename);
+                        break;
+                    }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 从ZIP包中获取媒体流
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private Stream GetZipStream(string filename)
+        {
+            Stream result = null;
+            FileStream zipToOpen = File.OpenRead(filename);
+            ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read);
+            var entry = archive.Entries[0];
+            result = entry.Open();
+            return result;
+        }
+        #endregion
     }
 }
