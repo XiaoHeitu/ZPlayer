@@ -260,6 +260,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
         {
+
+            this.SetMarqueeTest();
             this.Invoke(new Action(() =>
             {
                 this.sldProgress.Value = e.Position;
@@ -267,6 +269,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
                 var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length * e.Position);
                 this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
+
+                
             }));
         }
 
@@ -296,7 +300,39 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             {
                 this.btnPause.Visible = true;
                 this.btnPlay.Visible = false;
+
+                
             }));
+        }
+
+        private void SetMarqueeTest()
+        {
+            /*
+libvlc_video_set_marquee_string(m_vlc_player, libvlc_marquee_Text, "门禁已打开");
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Color, 0x00FFFFFF);
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Position, 0);
+//{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Opacity, 255);
+//0 = 透明，255 = 完全不透明。
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_X, 0); //从屏幕左边缘开始的 X 偏移。
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Y, 0);//  从屏幕顶部d向下的 Y 偏移。
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Timeout, 1000);
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Size, 32);
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Enable, 1);
+libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
+ */
+            this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Text, "测试");
+            this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Color, "00FFFFFF");
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Position, 0);
+            //{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Opacity,255);
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.X, 0); //从屏幕左边缘开始的 X 偏移。
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Y, 0);//  从屏幕顶部d向下的 Y 偏移。
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Timeout, 1000);
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Size, 320);
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Enable, 1);
+            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Refresh, 10);
+            
         }
 
         private void _mediaPlayer_Paused(object sender, EventArgs e)
