@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinFormAnimation;
 using XiaoHeitu.ZPlayer.WinForm.Apis;
 using XiaoHeitu.ZPlayer.WinForm.Controls;
 using XiaoHeitu.ZPlayer.WinForm.Events;
@@ -62,6 +61,19 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
             this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
             this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
+            //this._mediaPlayer.SetVideoCallbacks(
+            //    new MediaPlayer.LibVLCVideoLockCb((IntPtr opaque, IntPtr planes) =>
+            //    {                    
+            //        return planes;
+            //    }),
+            //    new MediaPlayer.LibVLCVideoUnlockCb((IntPtr opaque, IntPtr picture, IntPtr planes) =>
+            //    {
+            //        Bitmap.FromHbitmap(planes);
+            //    }),
+            //    new MediaPlayer.LibVLCVideoDisplayCb((IntPtr opaque, IntPtr picture) =>
+            //    {
+            //        Bitmap.FromHbitmap(picture);
+            //    }));
 
             this._preview = new MediaPlayer(this._libVLC);
             this._preview.EnableMouseInput = false;
@@ -260,17 +272,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
         private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
         {
-
-            this.SetMarqueeTest();
             this.Invoke(new Action(() =>
             {
                 this.sldProgress.Value = e.Position;
 
                 var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
-                var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Length * e.Position);
+                var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Time);
+                
+                
                 this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
 
-                
+
             }));
         }
 
@@ -301,12 +313,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
                 this.btnPause.Visible = true;
                 this.btnPlay.Visible = false;
 
-                
+
             }));
         }
 
-        private void SetMarqueeTest()
+
+        private void ShowMessage(string message)
         {
+            var g= this.pMoiveHost.CreateGraphics();
+            this.pMoiveHost.Refresh();
+            g.DrawString(message, new Font("Microsoft YaHei UI", 18,FontStyle.Bold), Brushes.Yellow, new Point(50, 50));
+            
             /*
 libvlc_video_set_marquee_string(m_vlc_player, libvlc_marquee_Text, "门禁已打开");
 libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Color, 0x00FFFFFF);
@@ -321,18 +338,17 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Size, 32);
 libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Enable, 1);
 libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
  */
-            this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Text, "测试");
-            this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Color, "00FFFFFF");
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Position, 0);
-            //{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Opacity,255);
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.X, 0); //从屏幕左边缘开始的 X 偏移。
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Y, 0);//  从屏幕顶部d向下的 Y 偏移。
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Timeout, 1000);
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Size, 320);
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Enable, 1);
-            this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Refresh, 10);
-            
+            //this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Text, message);
+            //this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Color, "00FFFF00");
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Position, 5);
+            ////{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Opacity, 255);
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.X, 50); //从屏幕左边缘开始的 X 偏移。
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Y, 50);//  从屏幕顶部d向下的 Y 偏移。
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Timeout, 1000);
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Size, 18);
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Enable, 1);
+            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Refresh, 10);
         }
 
         private void _mediaPlayer_Paused(object sender, EventArgs e)
@@ -344,6 +360,8 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
             }));
 
         }
+
+
         #endregion
 
         #region 控制器事件
@@ -402,6 +420,7 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
         private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             this._mediaPlayer.Volume = (int)(e.Value * 100);
+            this.ShowMessage(e.Value.ToString("P0"));
             this.ChangebtnVolumeImage();
         }
 
@@ -433,6 +452,59 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
                 Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
             }
         }
+
+
+        Point lastLocation = Point.Empty;
+        BackgroundWorker lastWorker = null;
+        private void pMoiveHost_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.isFullscreen && this.lastLocation != e.Location)
+            {
+                Cursor.Show();
+                this.zContainer1.Visible = true;
+                if (this.lastWorker != null)
+                {
+                    this.lastWorker.CancelAsync();
+                }
+                this.lastWorker = new BackgroundWorker();
+                this.lastWorker.WorkerSupportsCancellation = true;
+                this.lastWorker.DoWork += (ss, ee) =>
+                {
+                    for (int i = 0; i < 2000; i++)
+                    {
+                        Thread.Sleep(1);
+                        if (((BackgroundWorker)ss).CancellationPending)
+                        {
+                            ee.Cancel = true;
+                            return;
+                        }
+                    }
+                };
+                this.lastWorker.RunWorkerCompleted += (ss, ee) =>
+                {
+                    if (ee.Cancelled || !this.isFullscreen)
+                    {
+                        return;
+                    }
+                    this.Invoke(new Action(() =>
+                    {
+                        Cursor.Hide();
+                        this.zContainer1.Visible = false;
+                    }));
+                };
+                this.lastWorker.RunWorkerAsync();
+            }
+
+            this.lastLocation = e.Location;
+        }
+
+        private void zContainer1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.lastWorker != null)
+            {
+                this.lastWorker.CancelAsync();
+            }
+        }
         #endregion
 
         #region 菜单事件
@@ -458,6 +530,49 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
 
             this.Replay();
         }
+
+        private void cmsReightMenu_Opening(object sender, CancelEventArgs e)
+        {
+            var spuCount = this._mediaPlayer.SpuCount;
+            this.miSelectSubtitle.DropDownItems.Clear();
+            this.miSelectSubtitle.Enabled = (spuCount > 0);
+            if (!this.miSubtitle.Enabled)
+            {
+                return;
+            }
+
+
+            for (int i = 0; i < spuCount; i++)
+            {
+                var spu = this._mediaPlayer.SpuDescription[i];
+
+
+                var mi = new ToolStripMenuItem();
+
+                mi.Text = spu.Name;
+                mi.Tag = spu.Id;
+                mi.Click += (ss, ee) =>
+                {
+                    var ssmi = (ToolStripMenuItem)ss;
+                    this._mediaPlayer.SetSpu((int)ssmi.Tag);
+                };
+                mi.Checked = (spu.Id == this._mediaPlayer.Spu);
+
+                this.miSelectSubtitle.DropDownItems.Add(mi);
+            }
+        }
+
+        private void miLoadSubtitleFile_Click(object sender, EventArgs e)
+        {
+            var result = this.openFD.ShowDialog();
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            this._mediaPlayer.AddSlave(MediaSlaveType.Subtitle, this.PathToUri(this.openFD.FileName), true);
+
+        }
         #endregion
 
         #region 方法
@@ -474,7 +589,8 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
         private void Play(string fileName)
         {
             this._preview.Media = new Media(this._libVLC, this.GetStream(fileName));
-            this._mediaPlayer.Play(new Media(this._libVLC, this.GetStream(fileName)));
+            this._mediaPlayer.Media = new Media(this._libVLC, this.GetStream(fileName));
+            //this._mediaPlayer.Play();
         }
         /// <summary>
         /// 改变音量按钮图标
@@ -586,57 +702,13 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
         }
         #endregion
 
-        Point lastLocation = Point.Empty;
-        BackgroundWorker lastWorker = null;
-        private void pMoiveHost_MouseMove(object sender, MouseEventArgs e)
+
+        private string PathToUri(string path)
         {
-            if (this.isFullscreen && this.lastLocation != e.Location)
-            {
-                Cursor.Show();
-                this.zContainer1.Visible = true;
-                if (this.lastWorker != null)
-                {
-                    this.lastWorker.CancelAsync();
-                }
-                this.lastWorker = new BackgroundWorker();
-                this.lastWorker.WorkerSupportsCancellation = true;
-                this.lastWorker.DoWork += (ss, ee) =>
-                {
-                    for (int i = 0; i < 2000; i++)
-                    {
-                        Thread.Sleep(1);
-                        if (((BackgroundWorker)ss).CancellationPending)
-                        {
-                            ee.Cancel = true;
-                            return;
-                        }
-                    }
-                };
-                this.lastWorker.RunWorkerCompleted += (ss, ee) =>
-                {
-                    if (ee.Cancelled || !this.isFullscreen)
-                    {
-                        return;
-                    }
-                    this.Invoke(new Action(() =>
-                    {
-                        Cursor.Hide();
-                        this.zContainer1.Visible = false;
-                    }));
-                };
-                this.lastWorker.RunWorkerAsync();
-            }
-
-            this.lastLocation = e.Location;
+            var a = new UriBuilder();
+            a.Path = path;
+            a.Scheme = Uri.UriSchemeFile;
+            return a.Uri.ToString();
         }
-
-        private void zContainer1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (this.lastWorker != null)
-            {
-                this.lastWorker.CancelAsync();
-            }
-        }
-
     }
 }
