@@ -533,6 +533,40 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
 
         private void cmsReightMenu_Opening(object sender, CancelEventArgs e)
         {
+            this.InitSoundTrackMenuItem();
+            this.InitSubtitleMenuItem();
+        }
+
+        private void miLoadSubtitleFile_Click(object sender, EventArgs e)
+        {
+            var result = this.openFD.ShowDialog();
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            this._mediaPlayer.AddSlave(MediaSlaveType.Subtitle, this.PathToUri(this.openFD.FileName), true);
+
+        }
+
+
+        private void miLoadSoundTrackFile_Click(object sender, EventArgs e)
+        {
+            var result = this.openFD.ShowDialog();
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            this._mediaPlayer.AddSlave(MediaSlaveType.Audio, this.PathToUri(this.openFD.FileName), true);
+        }
+        #endregion
+
+        /// <summary>
+        /// 加载字幕菜单
+        /// </summary>
+        private void InitSubtitleMenuItem()
+        {
             var spuCount = this._mediaPlayer.SpuCount;
             this.miSelectSubtitle.DropDownItems.Clear();
             this.miSelectSubtitle.Enabled = (spuCount > 0);
@@ -562,18 +596,36 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
             }
         }
 
-        private void miLoadSubtitleFile_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 加载音轨
+        /// </summary>
+        private void InitSoundTrackMenuItem()
         {
-            var result = this.openFD.ShowDialog();
-            if (result != DialogResult.OK)
+            var stCount = this._mediaPlayer.AudioTrackCount;
+            this.miSelectSoundTrack.DropDownItems.Clear();
+            this.miSelectSoundTrack.Enabled = (stCount > 0);
+            if (!this.miSubtitle.Enabled)
             {
                 return;
             }
 
-            this._mediaPlayer.AddSlave(MediaSlaveType.Subtitle, this.PathToUri(this.openFD.FileName), true);
 
+            for (int i = 0; i < stCount; i++)
+            {
+                var st = this._mediaPlayer.AudioTrackDescription[i];
+                var mi = new ToolStripMenuItem();
+                mi.Text = st.Name;
+                mi.Tag = st.Id;
+                mi.Click += (ss, ee) =>
+                {
+                    var ssmi = (ToolStripMenuItem)ss;
+                    this._mediaPlayer.SetAudioTrack((int)ssmi.Tag);
+                };
+                mi.Checked = (st.Id == this._mediaPlayer.AudioTrack);
+
+                this.miSelectSoundTrack.DropDownItems.Add(mi);
+            }
         }
-        #endregion
 
         #region 方法
 

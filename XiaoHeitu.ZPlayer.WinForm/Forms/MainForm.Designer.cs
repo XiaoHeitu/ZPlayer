@@ -31,18 +31,25 @@
         {
             this.components = new System.ComponentModel.Container();
             this.pMoiveHost = new System.Windows.Forms.Panel();
-            this.cmsReightMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miAudio = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miFile = new System.Windows.Forms.ToolStripMenuItem();
             this.miOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSubtitle = new System.Windows.Forms.ToolStripMenuItem();
+            this.miLoadSubtitleFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSelectSubtitle = new System.Windows.Forms.ToolStripMenuItem();
             this.miHardwareDecoding = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.miExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.miSubtitle = new System.Windows.Forms.ToolStripMenuItem();
             this.zContainer1 = new XiaoHeitu.ZPlayer.WinForm.Controls.ZContainer();
             this.pPreviewHost = new System.Windows.Forms.Panel();
-            this.miLoadSubtitleFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.miSelectSubtitle = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsReightMenu.SuspendLayout();
+            this.音频ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSelectSoundTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSoundChannel = new System.Windows.Forms.ToolStripMenuItem();
+            this.miStereo = new System.Windows.Forms.ToolStripMenuItem();
+            this.miLeftSoundChannel = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRightSoundChannel = new System.Windows.Forms.ToolStripMenuItem();
+            this.miLoadSoundTrackFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miAudio.SuspendLayout();
             this.SuspendLayout();
             // 
             // pMoiveHost
@@ -53,7 +60,7 @@
             this.pMoiveHost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.pMoiveHost.BackgroundImage = global::XiaoHeitu.ZPlayer.WinForm.Properties.Resources.Logo;
             this.pMoiveHost.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pMoiveHost.ContextMenuStrip = this.cmsReightMenu;
+            this.pMoiveHost.ContextMenuStrip = this.miAudio;
             this.pMoiveHost.Location = new System.Drawing.Point(2, 2);
             this.pMoiveHost.Name = "pMoiveHost";
             this.pMoiveHost.Size = new System.Drawing.Size(640, 461);
@@ -61,17 +68,18 @@
             this.pMoiveHost.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pMoiveHost_MouseDown);
             this.pMoiveHost.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pMoiveHost_MouseMove);
             // 
-            // cmsReightMenu
+            // miAudio
             // 
-            this.cmsReightMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miAudio.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miFile,
+            this.音频ToolStripMenuItem,
             this.miSubtitle,
             this.miHardwareDecoding,
             this.toolStripSeparator1,
             this.miExit});
-            this.cmsReightMenu.Name = "cmsReightMenu";
-            this.cmsReightMenu.Size = new System.Drawing.Size(181, 120);
-            this.cmsReightMenu.Opening += new System.ComponentModel.CancelEventHandler(this.cmsReightMenu_Opening);
+            this.miAudio.Name = "cmsReightMenu";
+            this.miAudio.Size = new System.Drawing.Size(181, 142);
+            this.miAudio.Opening += new System.ComponentModel.CancelEventHandler(this.cmsReightMenu_Opening);
             // 
             // miFile
             // 
@@ -87,6 +95,28 @@
             this.miOpenFile.Size = new System.Drawing.Size(142, 22);
             this.miOpenFile.Text = "打开文件(&O)";
             this.miOpenFile.Click += new System.EventHandler(this.miOpenFile_Click);
+            // 
+            // miSubtitle
+            // 
+            this.miSubtitle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miLoadSubtitleFile,
+            this.miSelectSubtitle});
+            this.miSubtitle.Name = "miSubtitle";
+            this.miSubtitle.Size = new System.Drawing.Size(180, 22);
+            this.miSubtitle.Text = "字幕";
+            // 
+            // miLoadSubtitleFile
+            // 
+            this.miLoadSubtitleFile.Name = "miLoadSubtitleFile";
+            this.miLoadSubtitleFile.Size = new System.Drawing.Size(180, 22);
+            this.miLoadSubtitleFile.Text = "加载字幕文件";
+            this.miLoadSubtitleFile.Click += new System.EventHandler(this.miLoadSubtitleFile_Click);
+            // 
+            // miSelectSubtitle
+            // 
+            this.miSelectSubtitle.Name = "miSelectSubtitle";
+            this.miSelectSubtitle.Size = new System.Drawing.Size(180, 22);
+            this.miSelectSubtitle.Text = "选择字幕";
             // 
             // miHardwareDecoding
             // 
@@ -107,15 +137,6 @@
             this.miExit.Text = "退出(X)";
             this.miExit.Click += new System.EventHandler(this.miExit_Click);
             // 
-            // miSubtitle
-            // 
-            this.miSubtitle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miLoadSubtitleFile,
-            this.miSelectSubtitle});
-            this.miSubtitle.Name = "miSubtitle";
-            this.miSubtitle.Size = new System.Drawing.Size(180, 22);
-            this.miSubtitle.Text = "字幕";
-            // 
             // zContainer1
             // 
             this.zContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -124,7 +145,7 @@
             this.zContainer1.BackgroundEdgeInset = new System.Windows.Forms.Padding(2, 2, 2, 29);
             this.zContainer1.BackgroundImage = global::XiaoHeitu.ZPlayer.WinForm.Properties.Resources.Background;
             this.zContainer1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.zContainer1.ContextMenuStrip = this.cmsReightMenu;
+            this.zContainer1.ContextMenuStrip = this.miAudio;
             this.zContainer1.Location = new System.Drawing.Point(2, 462);
             this.zContainer1.Name = "zContainer1";
             this.zContainer1.Size = new System.Drawing.Size(640, 29);
@@ -142,18 +163,56 @@
             this.pPreviewHost.TabIndex = 0;
             this.pPreviewHost.Visible = false;
             // 
-            // miLoadSubtitleFile
+            // 音频ToolStripMenuItem
             // 
-            this.miLoadSubtitleFile.Name = "miLoadSubtitleFile";
-            this.miLoadSubtitleFile.Size = new System.Drawing.Size(180, 22);
-            this.miLoadSubtitleFile.Text = "加载字幕文件";
-            this.miLoadSubtitleFile.Click += new System.EventHandler(this.miLoadSubtitleFile_Click);
+            this.音频ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miLoadSoundTrackFile,
+            this.miSelectSoundTrack,
+            this.miSoundChannel});
+            this.音频ToolStripMenuItem.Name = "音频ToolStripMenuItem";
+            this.音频ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.音频ToolStripMenuItem.Text = "音频";
             // 
-            // miSelectSubtitle
+            // miSelectSoundTrack
             // 
-            this.miSelectSubtitle.Name = "miSelectSubtitle";
-            this.miSelectSubtitle.Size = new System.Drawing.Size(180, 22);
-            this.miSelectSubtitle.Text = "选择字幕";
+            this.miSelectSoundTrack.Name = "miSelectSoundTrack";
+            this.miSelectSoundTrack.Size = new System.Drawing.Size(180, 22);
+            this.miSelectSoundTrack.Text = "音轨";
+            // 
+            // miSoundChannel
+            // 
+            this.miSoundChannel.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miStereo,
+            this.miLeftSoundChannel,
+            this.miRightSoundChannel});
+            this.miSoundChannel.Name = "miSoundChannel";
+            this.miSoundChannel.Size = new System.Drawing.Size(180, 22);
+            this.miSoundChannel.Text = "声道";
+            // 
+            // miStereo
+            // 
+            this.miStereo.Name = "miStereo";
+            this.miStereo.Size = new System.Drawing.Size(180, 22);
+            this.miStereo.Text = "立体声";
+            // 
+            // miLeftSoundChannel
+            // 
+            this.miLeftSoundChannel.Name = "miLeftSoundChannel";
+            this.miLeftSoundChannel.Size = new System.Drawing.Size(180, 22);
+            this.miLeftSoundChannel.Text = "左声道";
+            // 
+            // miRightSoundChannel
+            // 
+            this.miRightSoundChannel.Name = "miRightSoundChannel";
+            this.miRightSoundChannel.Size = new System.Drawing.Size(180, 22);
+            this.miRightSoundChannel.Text = "右声道";
+            // 
+            // miLoadSoundTrackFile
+            // 
+            this.miLoadSoundTrackFile.Name = "miLoadSoundTrackFile";
+            this.miLoadSoundTrackFile.Size = new System.Drawing.Size(180, 22);
+            this.miLoadSoundTrackFile.Text = "加载音轨文件";
+            this.miLoadSoundTrackFile.Click += new System.EventHandler(this.miLoadSoundTrackFile_Click);
             // 
             // MainForm
             // 
@@ -162,7 +221,7 @@
             this.BackgroundImage = global::XiaoHeitu.ZPlayer.WinForm.Properties.Resources.Background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(644, 494);
-            this.ContextMenuStrip = this.cmsReightMenu;
+            this.ContextMenuStrip = this.miAudio;
             this.Controls.Add(this.pPreviewHost);
             this.Controls.Add(this.zContainer1);
             this.Controls.Add(this.pMoiveHost);
@@ -172,7 +231,7 @@
             this.Name = "MainForm";
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
-            this.cmsReightMenu.ResumeLayout(false);
+            this.miAudio.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -181,7 +240,7 @@
         private System.Windows.Forms.Panel pMoiveHost;
         private System.Windows.Forms.Panel pPreviewHost;
         private Controls.ZContainer zContainer1;
-        private System.Windows.Forms.ContextMenuStrip cmsReightMenu;
+        private System.Windows.Forms.ContextMenuStrip miAudio;
         private System.Windows.Forms.ToolStripMenuItem miFile;
         private System.Windows.Forms.ToolStripMenuItem miExit;
         private System.Windows.Forms.ToolStripMenuItem miOpenFile;
@@ -190,6 +249,13 @@
         private System.Windows.Forms.ToolStripMenuItem miSubtitle;
         private System.Windows.Forms.ToolStripMenuItem miLoadSubtitleFile;
         private System.Windows.Forms.ToolStripMenuItem miSelectSubtitle;
+        private System.Windows.Forms.ToolStripMenuItem 音频ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miSelectSoundTrack;
+        private System.Windows.Forms.ToolStripMenuItem miSoundChannel;
+        private System.Windows.Forms.ToolStripMenuItem miLoadSoundTrackFile;
+        private System.Windows.Forms.ToolStripMenuItem miStereo;
+        private System.Windows.Forms.ToolStripMenuItem miLeftSoundChannel;
+        private System.Windows.Forms.ToolStripMenuItem miRightSoundChannel;
     }
 }
 
