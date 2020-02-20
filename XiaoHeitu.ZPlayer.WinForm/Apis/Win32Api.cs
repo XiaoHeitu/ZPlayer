@@ -56,6 +56,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
             WHITENESS = 0x00FF0062, /* dest = WHITE */
         };
 
+        [DllImport("user32.dll", EntryPoint = "SetParent")]
+        public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
         [DllImport("user32.dll")]

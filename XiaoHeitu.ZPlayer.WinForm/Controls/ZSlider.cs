@@ -209,6 +209,13 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             }
         }
 
+        [Browsable(true)]
+        [DefaultValue(0.01f)]
+        public float Step
+        {
+            get; set;
+        } = 0.01f;
+
 
 
         public event ValueChangedEventHandler ValueChanged;
@@ -340,7 +347,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Controls
             {
                 value = 0;
             }
-            return value;
+            return (float)Math.Round((double)value, 2);
         }
 
         private void DrawControl(ZGraphics g)

@@ -17,6 +17,8 @@ namespace XiaoHeitu.ZPlayer.WinForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(args.FirstOrDefault()));
+            //Application.Run(new blankTest.Form1());
+            //Application.Run(new OsdForm());
         }
     }
 }

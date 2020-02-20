@@ -97,7 +97,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
             return newImage;
         }
 
-        private void DrawImageByBitBlt(Graphics grDest, Bitmap image, Rectangle rDest)
+        public static void DrawImageByBitBlt(Graphics grDest, Bitmap image, Rectangle rDest)
         {
             using (Graphics grSrc = Graphics.FromImage(image))
             {
@@ -108,7 +108,7 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
                 try
                 {
                     hdcDest = grDest.GetHdc();
-                    hdcSrc = grSrc.GetHdc(); 
+                    hdcSrc = grSrc.GetHdc();
                     hBitmap = image.GetHbitmap();
                     hOldObject = Win32Api.SelectObject(hdcSrc, hBitmap);
                     if (hOldObject == IntPtr.Zero)
@@ -124,6 +124,44 @@ namespace XiaoHeitu.ZPlayer.WinForm.Apis
                     if (hdcSrc != IntPtr.Zero) grSrc.ReleaseHdc(hdcSrc);
                 }
             }
+        }
+
+        public static Bitmap BGR24ToBitmap(IntPtr rgb32Source, int width, int height)
+        {
+            int lenData = width * height * 3;//数据长度，24位图像数据的长度=宽度*高度*3
+            byte[] imgBGR = new byte[lenData];//创建指定长度byte数据
+            System.Runtime.InteropServices.Marshal.Copy(rgb32Source, imgBGR, 0, imgBGR.Length);
+
+            Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            if (imgBGR != null)
+            {
+                //构造一个位图数组进行数据存储
+                byte[] rgbvalues = new byte[imgBGR.Length];
+
+                //对每一个像素的颜色进行转化
+                for (int i = 0; i < rgbvalues.Length; i += 3)
+                {
+                    rgbvalues[i] = imgBGR[i + 2];
+                    rgbvalues[i + 1] = imgBGR[i + 1];
+                    rgbvalues[i + 2] = imgBGR[i];
+                }
+
+
+                //位图矩形
+                Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                //以可读写的方式将图像数据锁定
+                System.Drawing.Imaging.BitmapData bmpdata = bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //得到图形在内存中的首地址
+                IntPtr ptr = bmpdata.Scan0;
+
+                //把处理后的图像数组复制回图像
+                System.Runtime.InteropServices.Marshal.Copy(rgbvalues, 0, ptr, imgBGR.Length);
+                //解锁位图像素
+                bmp.UnlockBits(bmpdata);
+
+            }
+            return bmp;
         }
     }
 }

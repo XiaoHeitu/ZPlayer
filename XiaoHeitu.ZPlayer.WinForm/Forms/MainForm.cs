@@ -1,4 +1,5 @@
 ﻿using LibVLCSharp.Shared;
+using SharpGL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,10 +29,17 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         MediaPlayer _preview;
 
 
+        private readonly static object _MyLock = new object();
+
         FormWindowState tempWindowState = FormWindowState.Normal;
         bool isFullscreen = false;
 
         float replayPosition = 0;
+
+        IntPtr buffer = IntPtr.Zero;
+        uint videoWidth = 0;
+        uint videoHeight = 0;
+
 
         /// <summary>
         /// Initializes a new instance of the Form1 class
@@ -60,20 +68,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             this._mediaPlayer.EndReached += this._mediaPlayer_EndReached;
             this._mediaPlayer.PositionChanged += this._mediaPlayer_PositionChanged;
             this._mediaPlayer.LengthChanged += this._mediaPlayer_LengthChanged;
-            this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
-            //this._mediaPlayer.SetVideoCallbacks(
-            //    new MediaPlayer.LibVLCVideoLockCb((IntPtr opaque, IntPtr planes) =>
-            //    {                    
-            //        return planes;
-            //    }),
-            //    new MediaPlayer.LibVLCVideoUnlockCb((IntPtr opaque, IntPtr picture, IntPtr planes) =>
-            //    {
-            //        Bitmap.FromHbitmap(planes);
-            //    }),
-            //    new MediaPlayer.LibVLCVideoDisplayCb((IntPtr opaque, IntPtr picture) =>
-            //    {
-            //        Bitmap.FromHbitmap(picture);
-            //    }));
+            //this._mediaPlayer.Hwnd = this.pMoiveHost.Handle;
+            this._mediaPlayer.EnableHardwareDecoding = false;
+
 
             this._preview = new MediaPlayer(this._libVLC);
             this._preview.EnableMouseInput = false;
@@ -86,9 +83,9 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             //初始值
             this.sldVolume.Value = this._mediaPlayer.Volume / 100f;
 
-            //this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
-            //this.MinimumSize = new Size(this.Width, this.Height);//窗体改变大小时最小限定在初始化大小  
         }
+
+
         public MainForm(string fileName) : this()
         {
             if (!string.IsNullOrWhiteSpace(fileName))
@@ -268,6 +265,24 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
         {
             var timeLength = TimeSpan.FromMilliseconds(e.Length);
             this.labProgress.Text = $"0:00/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
+            this._mediaPlayer.Size(0, ref this.videoWidth, ref this.videoHeight);
+            this._mediaPlayer.SetVideoCallbacks(
+                new MediaPlayer.LibVLCVideoLockCb((IntPtr opaque, IntPtr planes) =>
+                {
+                    Monitor.Enter(MainForm._MyLock);
+                    System.Runtime.InteropServices.Marshal.FreeHGlobal(this.buffer);//释放缓冲区
+                    this.buffer = System.Runtime.InteropServices.Marshal.AllocHGlobal((int)this.videoWidth * (int)this.videoHeight * 3);
+                    System.Runtime.InteropServices.Marshal.WriteIntPtr(planes, this.buffer);
+                    return IntPtr.Zero;
+                }),
+                new MediaPlayer.LibVLCVideoUnlockCb((IntPtr opaque, IntPtr picture, IntPtr planes) =>
+                {
+                    Monitor.Exit(MainForm._MyLock);
+                }), new MediaPlayer.LibVLCVideoDisplayCb((IntPtr opaque, IntPtr picture) =>
+                {
+                    this.Invoke(new Action(this.openGLControl1.DoRender));
+                }));
+            this._mediaPlayer.SetVideoFormat("RV24", this.videoWidth, this.videoHeight, this.videoWidth * 3);
         }
 
         private void _mediaPlayer_PositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
@@ -278,8 +293,8 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
 
                 var timeLength = TimeSpan.FromMilliseconds(this._mediaPlayer.Length);
                 var timePosition = TimeSpan.FromMilliseconds(this._mediaPlayer.Time);
-                
-                
+
+
                 this.labProgress.Text = $"{(int)timePosition.TotalMinutes}:{timePosition.Seconds:00}/{(int)timeLength.TotalMinutes}:{timeLength.Seconds:00}";
 
 
@@ -312,43 +327,74 @@ namespace XiaoHeitu.ZPlayer.WinForm.Forms
             {
                 this.btnPause.Visible = true;
                 this.btnPlay.Visible = false;
-
-
             }));
         }
-
-
-        private void ShowMessage(string message)
+        object osdLock = new object();
+        Bitmap osdMessage;
+        BackgroundWorker osdDelayTask;
+        int osdDelay = 2000;
+        private void ShowOSD(string message)
         {
-            var g= this.pMoiveHost.CreateGraphics();
-            this.pMoiveHost.Refresh();
-            g.DrawString(message, new Font("Microsoft YaHei UI", 18,FontStyle.Bold), Brushes.Yellow, new Point(50, 50));
-            
-            /*
-libvlc_video_set_marquee_string(m_vlc_player, libvlc_marquee_Text, "门禁已打开");
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Color, 0x00FFFFFF);
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Position, 0);
-//{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Opacity, 255);
-//0 = 透明，255 = 完全不透明。
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_X, 0); //从屏幕左边缘开始的 X 偏移。
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Y, 0);//  从屏幕顶部d向下的 Y 偏移。
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Timeout, 1000);
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Size, 32);
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Enable, 1);
-libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
- */
-            //this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Text, message);
-            //this._mediaPlayer.SetMarqueeString(VideoMarqueeOption.Color, "00FFFF00");
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Position, 5);
-            ////{0 (居中), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)} 
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Opacity, 255);
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.X, 50); //从屏幕左边缘开始的 X 偏移。
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Y, 50);//  从屏幕顶部d向下的 Y 偏移。
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Timeout, 1000);
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Size, 18);
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Enable, 1);
-            //this._mediaPlayer.SetMarqueeInt(VideoMarqueeOption.Refresh, 10);
+            if (this.osdDelayTask != null)
+            {
+                this.osdDelayTask.CancelAsync();
+            }
+
+            lock (this.osdLock)
+            {
+                if (this.osdMessage != null)
+                {
+                    this.osdMessage.Dispose();
+                    this.osdMessage = null;
+                }
+
+                var ff = new FontFamily("Microsoft YaHei UI");
+                var f = new Font(ff, 24, FontStyle.Regular, GraphicsUnit.Point);
+                var gp = new System.Drawing.Drawing2D.GraphicsPath();
+                gp.AddString(message, ff, (int)FontStyle.Regular, 18, Point.Empty, StringFormat.GenericDefault);
+                var gpb = gp.GetBounds();
+
+                Bitmap text = new Bitmap((int)gpb.Width + 10, (int)gpb.Height + 10);
+                using (var tg = Graphics.FromImage(text))
+                {
+                    tg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    tg.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                    tg.FillPath(Brushes.Yellow, gp);
+                    tg.Dispose();
+                }
+
+                this.osdMessage = text;
+            }
+            this.Invoke(new Action(this.openGLControl1.DoRender));
+
+            this.osdDelayTask = new BackgroundWorker();
+            this.osdDelayTask.WorkerSupportsCancellation = true;
+            this.osdDelayTask.DoWork += (sender, e) =>
+            {
+                Thread.Sleep(this.osdDelay);
+                if (((BackgroundWorker)sender).CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            };
+            this.osdDelayTask.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Cancelled)
+                {
+                    return;
+                }
+                lock (this.osdLock)
+                {
+                    if (this.osdMessage != null)
+                    {
+                        this.osdMessage.Dispose();
+                        this.osdMessage = null;
+                    }
+                }
+                this.Invoke(new Action(this.openGLControl1.DoRender));
+            };
+            this.osdDelayTask.RunWorkerAsync();
         }
 
         private void _mediaPlayer_Paused(object sender, EventArgs e)
@@ -420,7 +466,7 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
         private void SldVolume_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             this._mediaPlayer.Volume = (int)(e.Value * 100);
-            this.ShowMessage(e.Value.ToString("P0"));
+            this.ShowOSD($"音量：{e.Value:P0}");
             this.ChangebtnVolumeImage();
         }
 
@@ -525,8 +571,7 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
 
         private void miHardwareDecoding_Click(object sender, EventArgs e)
         {
-            this.miHardwareDecoding.Checked = !this.miHardwareDecoding.Checked;
-            this._mediaPlayer.EnableHardwareDecoding = this.miHardwareDecoding.Checked;
+            this._mediaPlayer.EnableHardwareDecoding = !this._mediaPlayer.EnableHardwareDecoding;
 
             this.Replay();
         }
@@ -535,6 +580,12 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
         {
             this.InitSoundTrackMenuItem();
             this.InitSubtitleMenuItem();
+            this.InitHardwareDecodingMenuItem();
+        }
+
+        private void InitHardwareDecodingMenuItem()
+        {
+            this.miHardwareDecoding.Checked = this._mediaPlayer.EnableHardwareDecoding;
         }
 
         private void miLoadSubtitleFile_Click(object sender, EventArgs e)
@@ -680,7 +731,7 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
                 this.MaximumSize = Screen.FromHandle(this.Handle).WorkingArea.Size;
                 this.isFullscreen = false;
 
-                this.pMoiveHost.SetBounds(2, 2, this.ClientSize.Width - 4, this.Height - this.zContainer1.Height - 4);
+                this.openGLControl1.SetBounds(2, 2, this.ClientSize.Width - 4, this.Height - this.zContainer1.Height - 4);
                 this.zContainer1.Visible = true;
             }
             else
@@ -692,7 +743,7 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
 
 
 
-                this.pMoiveHost.Bounds = this.ClientRectangle;
+                this.openGLControl1.Bounds = this.ClientRectangle;
                 this.zContainer1.Visible = false;
             }
         }
@@ -761,6 +812,135 @@ libvlc_video_set_marquee_int(m_vlc_player, libvlc_marquee_Refresh, 10);
             a.Path = path;
             a.Scheme = Uri.UriSchemeFile;
             return a.Uri.ToString();
+        }
+
+        private void openGLControl1_OpenGLDraw(object sender, SharpGL.RenderEventArgs args)
+        {
+            SharpGL.OpenGL gl = this.openGLControl1.OpenGL;
+
+            //清除深度缓存 
+            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+
+            gl.MatrixMode(OpenGL.GL_PROJECTION);
+            //重置当前指定的矩阵为单位矩阵,将当前的用户坐标系的原点移到了屏幕中心
+            gl.LoadIdentity();
+
+            //显示视频画面
+            Monitor.Enter(MainForm._MyLock);
+            try
+            {
+                if (this.buffer != IntPtr.Zero)
+                {
+                    var xz = (float)this.openGLControl1.Width / (float)this.videoWidth;
+                    var yz = (float)this.openGLControl1.Height / (float)this.videoHeight;
+                    var xyz = 1f;
+                    xyz = Math.Min(xz, yz);
+                    if (xz < yz)
+                    {
+                        gl.RasterPos(-1f, (xyz / yz));
+                    }
+                    else
+                    {
+                        gl.RasterPos((xyz / xz), -1f);
+                    }
+                    gl.PixelZoom(xyz, -xyz);
+                    gl.DrawPixels((int)this.videoWidth, (int)this.videoHeight, OpenGL.GL_RGB, OpenGL.GL_UNSIGNED_BYTE, this.buffer);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                Monitor.Exit(MainForm._MyLock);
+            }
+
+            lock (this.osdLock)
+            {
+                if (this.osdMessage != null)
+                {
+                    var textData = this.osdMessage.LockBits(new Rectangle(0, 0, this.osdMessage.Width, this.osdMessage.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+
+                    //显示OSD
+                    var x = (2f / this.openGLControl1.Width) * 50f - 1f;
+                    var y = (2f / this.openGLControl1.Height) * (this.openGLControl1.Height - 50f) - 1f;
+                    gl.RasterPos(x, y);
+                    gl.PixelZoom(1, -1);
+                    gl.DrawPixels(this.osdMessage.Width, this.osdMessage.Height, OpenGL.GL_BGRA, OpenGL.GL_UNSIGNED_BYTE, textData.Scan0);
+                    this.osdMessage.UnlockBits(textData);
+
+
+                    //gl.DrawText(50, this.openGLControl1.Height - 18, 1, 1, 0, "Microsoft YaHei UI", 24, this.osdMessage);
+                }
+            }
+
+            gl.Flush();   //强制刷新
+        }
+
+        private void openGLControl1_OpenGLInitialized(object sender, EventArgs e)
+        {
+            OpenGL gl = this.openGLControl1.OpenGL;
+            gl.Enable(OpenGL.GL_BLEND);
+            gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+            gl.ClearColor(0, 0, 0, 0);
+        }
+
+        private void openGLControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.TogglePlayOrPause();
+                if (e.Clicks == 2)
+                {
+                    this.ToggleFullscreen();
+                }
+                Win32Api.ReleaseCapture();
+                Win32Api.SendMessage(this.Handle, Win32Api.WM_SYSCOMMAND, Win32Api.SC_MOVE + Win32Api.HTCAPTION, 0);
+            }
+        }
+
+        private void openGLControl1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.isFullscreen && this.lastLocation != e.Location)
+            {
+                Cursor.Show();
+                this.zContainer1.Visible = true;
+                if (this.lastWorker != null)
+                {
+                    this.lastWorker.CancelAsync();
+                }
+                this.lastWorker = new BackgroundWorker();
+                this.lastWorker.WorkerSupportsCancellation = true;
+                this.lastWorker.DoWork += (ss, ee) =>
+                {
+                    for (int i = 0; i < 2000; i++)
+                    {
+                        Thread.Sleep(1);
+                        if (((BackgroundWorker)ss).CancellationPending)
+                        {
+                            ee.Cancel = true;
+                            return;
+                        }
+                    }
+                };
+                this.lastWorker.RunWorkerCompleted += (ss, ee) =>
+                {
+                    if (ee.Cancelled || !this.isFullscreen)
+                    {
+                        return;
+                    }
+                    this.Invoke(new Action(() =>
+                    {
+                        Cursor.Hide();
+                        this.zContainer1.Visible = false;
+                    }));
+                };
+                this.lastWorker.RunWorkerAsync();
+            }
+
+            this.lastLocation = e.Location;
         }
     }
 }

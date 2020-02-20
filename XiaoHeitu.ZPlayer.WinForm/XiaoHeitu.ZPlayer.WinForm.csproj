@@ -121,11 +121,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LibVLCSharp">
+    <PackageReference Include="LibVLCSharp.WinForms">
       <Version>3.4.2</Version>
     </PackageReference>
     <PackageReference Include="ReactiveAnimation">
       <Version>1.0.26</Version>
+    </PackageReference>
+    <PackageReference Include="SharpGL.SceneGraph">
+      <Version>2.4.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="SharpGL.WinForms">
+      <Version>2.4.1.2</Version>
     </PackageReference>
     <PackageReference Include="System.IO.Compression">
       <Version>4.3.0</Version>
